@@ -76,5 +76,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\InvoiceAnalyserLibrary\InvoiceAnalyserLibrary.csproj">
+      <Project>{42399cba-50f0-4181-a2ce-cacf113d2b97}</Project>
+      <Name>InvoiceAnalyserLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
