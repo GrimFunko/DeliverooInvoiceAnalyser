@@ -5,11 +5,14 @@ using System.Text;
 using Xunit;
 using InvoiceAnalyserLibrary;
 
+using iText.Kernel.Pdf;
+using iText.Kernel.Pdf.Canvas.Parser;
+
 namespace InvoiceAnalyserLibrary.Tests
 {
     public class AnalyserToolsTests
     {
-        FileHandler fh = new FileHandler(@"C:\Users\luke\Desktop\TestFolder\GetFileNameTest");
+        FileHandler fh = new FileHandler(@"C:\Users\luke\Desktop\TestFolder\AnalyserTests");
         
         [Fact]
         public void FindCorrectDateStringRegex()
@@ -68,6 +71,90 @@ namespace InvoiceAnalyserLibrary.Tests
             Assert.Equal(expected1, actual1);
             Assert.Equal(expected2, actual2);
             Assert.Equal(expected3, actual3);
+        }
+
+        [Fact]
+        public void ReturnCorrectInvoiceTotal()
+        {
+            decimal expected = 25.48m;
+            decimal actual = AnalyserTools.GetTotal(fh.RenamingTargetInvoices[0]);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void ReturnCorrectDropFees()
+        {
+            FileHandler newFH = new FileHandler(@"C:\Users\luke\Desktop\TestFolder\AnalyserTests\AdjustmentsOnly");
+
+            decimal expected = 22.48m;
+            decimal? actual = AnalyserTools.GetDropFees(fh.RenamingTargetInvoices[0]);
+
+            decimal expected1 = 0;
+            decimal? actual1 = AnalyserTools.GetDropFees(newFH.PDFFiles[0]);
+
+            Assert.Equal(expected1, actual1);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void ReturnCorrectAdjustments()
+        {
+            FileHandler newFH = new FileHandler(@"C:\Users\luke\Desktop\TestFolder\AnalyserTests\AdjustmentsOnly");
+
+            decimal expected1 = 0;
+            decimal? actual1 = AnalyserTools.GetAdjustments(fh.RenamingTargetInvoices[0]);
+
+            decimal expected = 25m;
+            decimal? actual = AnalyserTools.GetAdjustments(newFH.PDFFiles[0]);
+
+            Assert.Equal(expected1, actual1);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void ReturnCorrectTipTotals()
+        {
+            FileHandler newFH = new FileHandler(@"C:\Users\luke\Desktop\TestFolder\AnalyserTests\AdjustmentsOnly");
+
+            decimal expected1 = 3m;
+            decimal? actual1 = AnalyserTools.GetTips(fh.RenamingTargetInvoices[0]);
+
+            decimal expected = 0;
+            decimal? actual = AnalyserTools.GetTips(newFH.PDFFiles[0]);
+            
+            Assert.Equal(expected1, actual1);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void ReturnCorrectHoursWorkedTotal()
+        {
+            FileHandler newFH = new FileHandler(@"C:\Users\luke\Desktop\TestFolder\AnalyserTests\AdjustmentsOnly");
+
+            double expected1 = 4.2;
+            double? actual1 = AnalyserTools.GetHoursWorked(fh.RenamingTargetInvoices[0]);
+
+            double expected = 0;
+            double? actual = AnalyserTools.GetHoursWorked(newFH.PDFFiles[0]);
+
+            Assert.Equal(expected1, actual1);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void ReturnCorrectOrdersDelivered()
+        {
+            FileHandler newFH = new FileHandler(@"C:\Users\luke\Desktop\TestFolder\AnalyserTests\AdjustmentsOnly");
+
+            int expected1 = 5;
+            int? actual1 = AnalyserTools.GetOrdersDelivered(fh.RenamingTargetInvoices[0]);
+
+            int expected = 0;
+            int? actual = AnalyserTools.GetOrdersDelivered(newFH.PDFFiles[0]);
+
+            Assert.Equal(expected1, actual1);
+            Assert.Equal(expected, actual);
         }
 
     }
