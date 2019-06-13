@@ -33,9 +33,9 @@ namespace InvoiceAnalyserLibrary.Tests
                 "Total £25.48" +
                 "1";
 
-            string expected = "28 May 2019";
+            DateTime expected = new DateTime(2019,05,28);
 
-            string actual = AnalyserTools.ExtractDateString(exampleData);
+            DateTime actual = AnalyserTools.ExtractDate(exampleData);
 
             Assert.Equal(expected, actual);
         }
@@ -77,7 +77,7 @@ namespace InvoiceAnalyserLibrary.Tests
         public void ReturnCorrectInvoiceTotal()
         {
             decimal expected = 25.48m;
-            decimal actual = AnalyserTools.GetTotal(fh.RenamingTargetInvoices[0]);
+            decimal? actual = AnalyserTools.GetTotal(fh.RenamingTargetInvoices[0]);
 
             Assert.Equal(expected, actual);
         }
@@ -88,10 +88,10 @@ namespace InvoiceAnalyserLibrary.Tests
             FileHandler newFH = new FileHandler(@"C:\Users\luke\Desktop\TestFolder\AnalyserTests\AdjustmentsOnly");
 
             decimal expected = 22.48m;
-            decimal? actual = AnalyserTools.GetDropFees(fh.RenamingTargetInvoices[0]);
+            decimal actual = AnalyserTools.GetDropFees(fh.RenamingTargetInvoices[0]);
 
             decimal expected1 = 0;
-            decimal? actual1 = AnalyserTools.GetDropFees(newFH.PDFFiles[0]);
+            decimal actual1 = AnalyserTools.GetDropFees(newFH.PDFFiles[0]);
 
             Assert.Equal(expected1, actual1);
             Assert.Equal(expected, actual);
@@ -103,10 +103,10 @@ namespace InvoiceAnalyserLibrary.Tests
             FileHandler newFH = new FileHandler(@"C:\Users\luke\Desktop\TestFolder\AnalyserTests\AdjustmentsOnly");
 
             decimal expected1 = 0;
-            decimal? actual1 = AnalyserTools.GetAdjustments(fh.RenamingTargetInvoices[0]);
+            decimal actual1 = AnalyserTools.GetAdjustments(fh.RenamingTargetInvoices[0]);
 
             decimal expected = 25m;
-            decimal? actual = AnalyserTools.GetAdjustments(newFH.PDFFiles[0]);
+            decimal actual = AnalyserTools.GetAdjustments(newFH.PDFFiles[0]);
 
             Assert.Equal(expected1, actual1);
             Assert.Equal(expected, actual);
@@ -118,10 +118,10 @@ namespace InvoiceAnalyserLibrary.Tests
             FileHandler newFH = new FileHandler(@"C:\Users\luke\Desktop\TestFolder\AnalyserTests\AdjustmentsOnly");
 
             decimal expected1 = 3m;
-            decimal? actual1 = AnalyserTools.GetTips(fh.RenamingTargetInvoices[0]);
+            decimal actual1 = AnalyserTools.GetTips(fh.RenamingTargetInvoices[0]);
 
             decimal expected = 0;
-            decimal? actual = AnalyserTools.GetTips(newFH.PDFFiles[0]);
+            decimal actual = AnalyserTools.GetTips(newFH.PDFFiles[0]);
             
             Assert.Equal(expected1, actual1);
             Assert.Equal(expected, actual);
@@ -133,10 +133,10 @@ namespace InvoiceAnalyserLibrary.Tests
             FileHandler newFH = new FileHandler(@"C:\Users\luke\Desktop\TestFolder\AnalyserTests\AdjustmentsOnly");
 
             double expected1 = 4.2;
-            double? actual1 = AnalyserTools.GetHoursWorked(fh.RenamingTargetInvoices[0]);
+            double actual1 = AnalyserTools.GetHoursWorked(fh.RenamingTargetInvoices[0]);
 
             double expected = 0;
-            double? actual = AnalyserTools.GetHoursWorked(newFH.PDFFiles[0]);
+            double actual = AnalyserTools.GetHoursWorked(newFH.PDFFiles[0]);
 
             Assert.Equal(expected1, actual1);
             Assert.Equal(expected, actual);
@@ -148,13 +148,38 @@ namespace InvoiceAnalyserLibrary.Tests
             FileHandler newFH = new FileHandler(@"C:\Users\luke\Desktop\TestFolder\AnalyserTests\AdjustmentsOnly");
 
             int expected1 = 5;
-            int? actual1 = AnalyserTools.GetOrdersDelivered(fh.RenamingTargetInvoices[0]);
+            int actual1 = AnalyserTools.GetOrdersDelivered(fh.RenamingTargetInvoices[0]);
 
             int expected = 0;
-            int? actual = AnalyserTools.GetOrdersDelivered(newFH.PDFFiles[0]);
+            int actual = AnalyserTools.GetOrdersDelivered(newFH.PDFFiles[0]);
 
             Assert.Equal(expected1, actual1);
             Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void SuccessullyCreateInvoiceObject()
+        {
+            IInvoice expected = new InvoiceModel()
+            {
+                Total = 25.48m,
+                DropFees = 22.48m,
+                Tips = 3m,
+                Adjustments = 0,
+                Date = new DateTime(2019, 05, 28),
+                HoursWorked = 4.2,
+                OrdersDelivered = 5
+            };
+
+            IInvoice actual = AnalyserTools.GetInvoiceModel(fh.RenamingTargetInvoices[0]);
+
+            Assert.Equal(expected.Date, actual.Date);
+            Assert.Equal(expected.Total, actual.Total);
+            Assert.Equal(expected.Adjustments, actual.Adjustments);
+            Assert.Equal(expected.Tips, actual.Tips);
+            Assert.Equal(expected.OrdersDelivered, actual.OrdersDelivered);
+            Assert.Equal(expected.HoursWorked, actual.HoursWorked);
+            Assert.Equal(expected.DropFees, actual.DropFees);
         }
 
     }

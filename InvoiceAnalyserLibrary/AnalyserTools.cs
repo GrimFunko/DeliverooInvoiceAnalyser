@@ -12,29 +12,24 @@ namespace InvoiceAnalyserLibrary
     {
         public static DateTime GetDate(FileInfo fileInfo)
         {
-            DateTime output = new DateTime();
             using (PdfReader reader = new PdfReader(fileInfo.FullName))
             {
                 using (PdfDocument doc = new PdfDocument(reader))
                 {
                     var content = PdfTextExtractor.GetTextFromPage(doc.GetFirstPage());
-                    var success = DateTime.TryParse(ExtractDateString(content), out output);
-                    if (!success)
-                        throw new Exception("DateTime.Parse Error.");
+                    return ExtractDate(content);
                 }
             }
-            return output;
         }
 
-        public static string ExtractDateString(string pdfString)
+        public static DateTime ExtractDate(string pdfString)
         {
             Regex regex = new Regex(@"Invoice\sDate\:\s\d{2}\s\w+\s\d{4}");
             Match match = regex.Match(pdfString);
 
-            if (match.Success)
-                return match.Value.Replace("Invoice Date: ", "");
-
-            return null;
+            return match.Success ?
+                (DateTime.TryParse(match.Value.Replace("Invoice Date: ", ""), out DateTime tmp) ?
+                tmp : throw new Exception("Date match parse error.")) : new DateTime();
         }
 
         public static string IdentifyTaxYear(DateTime invoiceDate)
@@ -59,174 +54,180 @@ namespace InvoiceAnalyserLibrary
             return output;
         }
 
-        public static decimal GetTotal(FileInfo fileInfo)
+        public static decimal? GetTotal(FileInfo fileInfo)
         {
-            decimal output = 0;
             using (PdfReader reader = new PdfReader(fileInfo.FullName))
             {
                 using (PdfDocument doc = new PdfDocument(reader))
                 {
                     var content = PdfTextExtractor.GetTextFromPage(doc.GetLastPage());
-                    var success = decimal.TryParse(ExtractTotal(content), out output);
 
-                    if (!success)
-                        throw new Exception("decimal.Parse Error");
+                    return ExtractTotal(content);
                 }
             }
-            return output;
         }
 
-        private static string ExtractTotal(string pdfString)
+        private static decimal? ExtractTotal(string pdfString)
         {
             Regex regex = new Regex(@"Total\s[£$€]\d+\.\d{2}");
             Match match = regex.Match(pdfString);
 
-            if (match.Success)
-                return match.Value.Remove(0,7);
-
-            return null;
+            return match.Success ?
+                (decimal.TryParse(match.Value.Remove(0,7),out decimal tmp) ?
+                (decimal?)tmp : throw new Exception("Total match parse error")) : null;
         }
 
-        public static decimal? GetDropFees(FileInfo fileInfo)
+        public static decimal GetDropFees(FileInfo fileInfo)
         {
-            decimal output;
             using (PdfReader reader = new PdfReader(fileInfo.FullName))
             {
                 using (PdfDocument doc = new PdfDocument(reader))
                 {
                     var content = PdfTextExtractor.GetTextFromPage(doc.GetLastPage());
 
-                    return decimal.TryParse(ExtractDropFees(content), out output) ?
-                        (decimal?)output : null;
+                    return ExtractDropFees(content);
                 }
-            }
-            
+            }     
         }
 
-        public static string ExtractDropFees(string pdfString)
+        public static decimal ExtractDropFees(string pdfString)
         {
             Regex regex = new Regex(@"Drop\sFees\s[£$€]\d+\.\d{2}");
             Match match = regex.Match(pdfString);
 
-            if (match.Success)
-                return match.Value.Remove(0, 11);
-
-            return "0";
+            return match.Success ?
+                (decimal.TryParse(match.Value.Remove(0, 11), out decimal tmp) ?
+                    tmp : throw new Exception("DropFees match parse error.")) : 0m;
         }
 
-        public static decimal? GetAdjustments(FileInfo fileInfo)
+        public static decimal GetAdjustments(FileInfo fileInfo)
         {
-            decimal output;
             using (PdfReader reader = new PdfReader(fileInfo.FullName))
             {
                 using (PdfDocument doc = new PdfDocument(reader))
                 {
                     var content = PdfTextExtractor.GetTextFromPage(doc.GetLastPage());
 
-                    return decimal.TryParse(ExtractAdjustments(content), out output) ?
-                        (decimal?)output : null;
+                    return ExtractAdjustments(content);
                 }
             }
         }
 
-        private static string ExtractAdjustments(string pdfString)
+        private static decimal ExtractAdjustments(string pdfString)
         {
             Regex regex = new Regex(@"Adjustments\s[£$€]\d+\.\d{2}");
             Match match = regex.Match(pdfString);
 
-            if (match.Success)
-                return match.Value.Remove(0, 13);
-
-            return "0";
+            return match.Success ?
+                (decimal.TryParse(match.Value.Remove(0, 13), out decimal tmp) ?
+                    tmp : throw new Exception("Adjustments match parse error.")) : 0m;      
         }
 
-        public static decimal? GetTips(FileInfo fileInfo)
+        public static decimal GetTips(FileInfo fileInfo)
         {
-            decimal output;
             using (PdfReader reader = new PdfReader(fileInfo.FullName))
             {
                 using (PdfDocument doc = new PdfDocument(reader))
                 {
                     var content = PdfTextExtractor.GetTextFromPage(doc.GetLastPage());
 
-                    return decimal.TryParse(ExtractTips(content), out output) ?
-                        (decimal?)output : null;
+                    return ExtractTips(content);
                 }
             }
         }
 
-        private static string ExtractTips(string pdfString)
+        private static decimal ExtractTips(string pdfString)
         {
             Regex regex = new Regex(@"Tips\s[£$€]\d+\.\d{2}");
             Match match = regex.Match(pdfString);
 
-            if (match.Success)
-                return match.Value.Remove(0, 6);
-
-            return "0";
+            return match.Success ?
+                (decimal.TryParse(match.Value.Remove(0, 6), out decimal output) ? 
+                    output : throw new Exception("Tips match parse error.")) : 0m;
         }
 
-        public static double? GetHoursWorked(FileInfo fileInfo)
+        public static double GetHoursWorked(FileInfo fileInfo)
         {
-            double output;
             using (PdfReader reader = new PdfReader(fileInfo.FullName))
             {
                 using (PdfDocument doc = new PdfDocument(reader))
                 {
                     var content = PdfTextExtractor.GetTextFromPage(doc.GetFirstPage());
 
-                    return double.TryParse(ExtractHoursWorked(content), out output) ?
-                        (double?)output : null;
+                    return ExtractHoursWorked(content);
                 }
             }
         }
 
-        private static string ExtractHoursWorked(string pdfString)
+        private static double ExtractHoursWorked(string pdfString)
         {
             double sum = 0;
             Regex regex = new Regex(@"\d+(\.\d)?h");
             var matches = regex.Matches(pdfString);
 
             if (matches.Count == 0)
-                return "0";
+                return 0;
 
             foreach (Match match in matches)
-                sum += double.Parse(match.Value.Replace("h", ""));
+                sum += double.TryParse(match.Value.Replace("h", ""), out double tmp) ? 
+                    tmp : throw new Exception("Hours match parsing error.");
 
-            return sum.ToString();
+            return sum;
         }
 
-        public static int? GetOrdersDelivered(FileInfo fileInfo)
+        public static int GetOrdersDelivered(FileInfo fileInfo)
         {
-            int output;
             using (PdfReader reader = new PdfReader(fileInfo.FullName))
             {
                 using (PdfDocument doc = new PdfDocument(reader))
                 {
                     var content = PdfTextExtractor.GetTextFromPage(doc.GetFirstPage());
 
-                    return int.TryParse(ExtractOrdersDelivered(content), out output) ?
-                        (int?)output : null;
+                    return ExtractOrdersDelivered(content);
                 }
             }
         }
 
-        private static string ExtractOrdersDelivered(string pdfString)
+        private static int ExtractOrdersDelivered(string pdfString)
         {
             int sum = 0;
             Regex regex = new Regex(@"\d+\:\s?[£$€]");
             var matches = regex.Matches(pdfString);
 
             if (matches.Count == 0)
-                return "0";
+                return 0;
 
             foreach (Match match in matches)
             {
                 var val = match.Value.IndexOf(':');
-                sum += int.Parse(match.Value.Remove(val));
+                sum += int.TryParse(match.Value.Remove(val), out int tmp) ?
+                    tmp : throw new Exception("Order match parsing error.");
             }
 
-            return sum.ToString();
+            return sum;
+        }
+
+        public static IInvoice GetInvoiceModel(FileInfo fileInfo)
+        {
+            using (PdfReader reader = new PdfReader(fileInfo.FullName))
+            {
+                using (PdfDocument doc = new PdfDocument(reader))
+                {
+                    var firstPage = PdfTextExtractor.GetTextFromPage(doc.GetFirstPage());
+                    var lastPage = PdfTextExtractor.GetTextFromPage(doc.GetLastPage());
+
+                    return new InvoiceModel() {
+                        Date = ExtractDate(firstPage),
+                        Total = ExtractTotal(lastPage),
+                        Adjustments = ExtractAdjustments(lastPage),
+                        Tips = ExtractTips(lastPage),
+                        DropFees = ExtractDropFees(firstPage),
+                        OrdersDelivered = ExtractOrdersDelivered(firstPage),
+                        HoursWorked = ExtractHoursWorked(firstPage)
+                    };
+
+                }
+            }
         }
     }
 }

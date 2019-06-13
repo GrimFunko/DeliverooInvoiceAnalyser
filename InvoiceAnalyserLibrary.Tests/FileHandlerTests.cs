@@ -23,7 +23,7 @@ namespace InvoiceAnalyserLibrary.Tests
         [Fact]
         public void GetsCorrectFileNames()
         {
-            FileHandler handler = new FileHandler(@"C:\Users\luke\Desktop\TestFolder\GetFileNameTest");
+            FileHandler handler = new FileHandler(@"C:\Users\luke\Desktop\TestFolder\AnalyserTests");
 
             string expected = @"invoice_ac19e198_0a4f_41c4_bad0_83b4b737da54_44_1559044034.pdf";
 
@@ -93,7 +93,7 @@ namespace InvoiceAnalyserLibrary.Tests
         [Fact]
         public void CorrectFileRename()
         {
-            FileHandler newFileHandler = new FileHandler(@"C:\Users\luke\Desktop\TestFolder\GetFileNameTest");
+            FileHandler newFileHandler = new FileHandler(@"C:\Users\luke\Desktop\TestFolder\AnalyserTests");
             int attempt = 0;
             DateTime dt = AnalyserTools.GetDate(newFileHandler.RenamingTargetInvoices[0]);
 

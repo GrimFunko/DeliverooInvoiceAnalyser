@@ -10,6 +10,6 @@ namespace InvoiceAnalyserLibrary
         double HoursWorked { get; set; }
         int OrdersDelivered { get; set; }
         decimal Tips { get; set; }
-        decimal Total { get; set; }
+        decimal? Total { get; set; }
     }
 }
