@@ -8,20 +8,6 @@ namespace InvoiceAnalyserLibrary
 {
     public class FileHandler
     {
-        private FileInfo[] _pdfFiles;
-        public FileInfo[] PDFFiles
-        {
-            get { return _pdfFiles; }
-            set { _pdfFiles = value; }
-        }
-
-        private FileInfo[] _renamingTargetInvoices;
-        public FileInfo[] RenamingTargetInvoices
-        {
-            get { return _renamingTargetInvoices; }
-            set { _renamingTargetInvoices = value; }
-        }
-
         public DirectoryInfo SelectedDirectory;
 
         public DirectoryInfo WorkingInvoiceDirectory;
@@ -30,24 +16,30 @@ namespace InvoiceAnalyserLibrary
         {
             SelectedDirectory = new DirectoryInfo(_directoryPath);
             WorkingInvoiceDirectory = new DirectoryInfo(_directoryPath + "/Deliveroo Invoices");
-            PDFFiles = GetPDFFiles();
-            RenamingTargetInvoices = GetRenamingTargetInvoices();
         }
 
-        internal FileInfo[] GetPDFFiles()
+        public FileInfo[] PDFFiles()
         {
             var files = SelectedDirectory.GetFiles("*.pdf", SearchOption.AllDirectories);
 
             return files;
         }
 
-        internal FileInfo[] GetRenamingTargetInvoices()
+        static FileInfo[] PDFFiles(DirectoryInfo directory)
         {
-            if (PDFFiles == null || PDFFiles.Length == 0)
+            var files = directory.GetFiles("*.pdf", SearchOption.AllDirectories);
+
+            return files;
+        }
+
+        public FileInfo[] InvoiceRenamingTargets()
+        {
+            var pdfs = PDFFiles();
+            if (pdfs == null || pdfs.Length == 0)
                 throw new Exception("No PDFs found.");
 
             List<FileInfo> output = new List<FileInfo>();
-            foreach(FileInfo file in PDFFiles)
+            foreach(FileInfo file in pdfs)
             {
                 if (IsInvoiceRenamingTarget(file.Name))
                     output.Add(file);
@@ -72,7 +64,7 @@ namespace InvoiceAnalyserLibrary
         public void OrganiseFiles()
         {
             CreateInvoiceDirectory();
-            foreach(FileInfo invoice in RenamingTargetInvoices)
+            foreach(FileInfo invoice in InvoiceRenamingTargets())
             {
                 var date = AnalyserTools.GetDate(invoice);
                 var TaxYear = AnalyserTools.IdentifyTaxYear(date);
@@ -99,6 +91,29 @@ namespace InvoiceAnalyserLibrary
         public string CreateFileName(DateTime dt, int attempt)
         {
             return attempt == 0 ? $"Invoice {dt.ToString("yyyy-MM-dd")}" : $"Invoice {dt.ToString("yyyy-MM-dd")} ({attempt})";
+        }
+
+        public FileInfo[] InvoiceFiles()
+        {
+            var pdfs = PDFFiles(WorkingInvoiceDirectory);
+            if (pdfs == null || pdfs.Length == 0)
+                throw new Exception("No PDFs found.");
+
+            List<FileInfo> output = new List<FileInfo>();
+            foreach (FileInfo file in pdfs)
+            {
+                if (IsInvoice(file.Name))
+                    output.Add(file);
+            }
+
+            return output.ToArray();
+        }
+
+        public bool IsInvoice(string fileName)
+        {
+            Regex reg = new Regex(@"^Invoice \d{4}-\d{2}-\d{2}\.pdf$");
+
+            return reg.IsMatch(fileName);
         }
     }
 }

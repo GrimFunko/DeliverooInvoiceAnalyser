@@ -15,7 +15,7 @@ namespace InvoiceAnalyserLibrary.Tests
         {
             int expected = 11;
 
-            int actual = fh.PDFFiles.Length;
+            int actual = fh.PDFFiles().Length;
 
             Assert.Equal(expected, actual);
         }
@@ -27,13 +27,13 @@ namespace InvoiceAnalyserLibrary.Tests
 
             string expected = @"invoice_ac19e198_0a4f_41c4_bad0_83b4b737da54_44_1559044034.pdf";
 
-            string actual = handler.PDFFiles[0].Name;
+            string actual = handler.PDFFiles()[0].Name;
 
             Assert.Equal(expected, actual);
         }
 
         [Fact]
-        public void CorrectInvoiceRegex()
+        public void IsInvoiceRenamingTargetCorrectRegex()
         {
             string exampleFileName = "Invoice 2019-01-01";
             string exampleFileName2 = "invoice_asldjfaljsdflkajsdf_aksdjfs_123123123";
@@ -52,7 +52,7 @@ namespace InvoiceAnalyserLibrary.Tests
         {
             int expected = 8;
 
-            int actual = fh.RenamingTargetInvoices.Length;
+            int actual = fh.InvoiceRenamingTargets().Length;
 
             Assert.Equal(expected, actual);
         }
@@ -95,13 +95,39 @@ namespace InvoiceAnalyserLibrary.Tests
         {
             FileHandler newFileHandler = new FileHandler(@"C:\Users\luke\Desktop\TestFolder\AnalyserTests");
             int attempt = 0;
-            DateTime dt = AnalyserTools.GetDate(newFileHandler.RenamingTargetInvoices[0]);
+            DateTime dt = AnalyserTools.GetDate(newFileHandler.InvoiceRenamingTargets()[0]);
 
             string expected = "Invoice 2019-05-28";
 
             string actualFileName = fh.CreateFileName(dt, attempt);
 
             Assert.Equal(expected, actualFileName);
+        }
+
+        [Fact]
+        public void GetInvoicesCorrectCount()
+        {
+            int expected = 6;
+            int actual = fh.InvoiceFiles().Length;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void IsInvoiceRegexCorrect()
+        {
+            string exampleFileName = "Invoice 2019-01-01.pdf";
+            string exampleFileName2 = "invoice_asldjfaljsdflkajsdf_aksdjfs_123123123.pdf";
+            string exampleFileName3 = "Invoice_aslkjdf_9345_9382_lakjsdlfj.pdf";
+            string exampleFileName4 = "Invoice 2019-01-01 (1).pdf";
+            string exampleFileName5 = "Invoice 19-01-01.pdf";
+
+
+            Assert.True(fh.IsInvoice(exampleFileName));
+            Assert.False(fh.IsInvoice(exampleFileName2));
+            Assert.False(fh.IsInvoice(exampleFileName3));
+            Assert.False(fh.IsInvoice(exampleFileName4));
+            Assert.False(fh.IsInvoice(exampleFileName5));
         }
     }
 }
