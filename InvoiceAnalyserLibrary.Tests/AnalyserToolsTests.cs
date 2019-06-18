@@ -7,6 +7,7 @@ using InvoiceAnalyserLibrary;
 
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas.Parser;
+using System.IO;
 
 namespace InvoiceAnalyserLibrary.Tests
 {
@@ -128,6 +129,22 @@ namespace InvoiceAnalyserLibrary.Tests
         }
 
         [Fact]
+        public void ReturnCorrectTransactionFees()
+        {
+            FileHandler newFH = new FileHandler(@"C:\Users\luke\Desktop\TestFolder\TestAnalysis");
+
+            decimal expected1 = -0.5m;
+            FileInfo invoice = new FileInfo(@"C:\Users\luke\Desktop\TestFolder\TestAnalysis\Deliveroo Invoices\2019-20 Tax Year\Invoice 2019-05-30.pdf");
+            decimal actual1 = AnalyserTools.GetTransactionFees(invoice);
+
+            decimal expected = 0m;
+            decimal actual = AnalyserTools.GetTransactionFees(newFH.PDFFiles()[0]);
+
+            Assert.Equal(expected1, actual1);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
         public void ReturnCorrectHoursWorkedTotal()
         {
             FileHandler newFH = new FileHandler(@"C:\Users\luke\Desktop\TestFolder\AnalyserTests\AdjustmentsOnly");
@@ -168,7 +185,8 @@ namespace InvoiceAnalyserLibrary.Tests
                 Adjustments = 0,
                 Date = new DateTime(2019, 05, 28),
                 HoursWorked = 4.2,
-                OrdersDelivered = 5
+                OrdersDelivered = 5,
+                TransactionFee = 0m
             };
 
             IInvoice actual = AnalyserTools.GetInvoiceModel(fh.InvoiceRenamingTargets()[0]);
@@ -180,6 +198,7 @@ namespace InvoiceAnalyserLibrary.Tests
             Assert.Equal(expected.OrdersDelivered, actual.OrdersDelivered);
             Assert.Equal(expected.HoursWorked, actual.HoursWorked);
             Assert.Equal(expected.DropFees, actual.DropFees);
+            Assert.Equal(expected.TransactionFee, actual.TransactionFee);
         }
 
     }

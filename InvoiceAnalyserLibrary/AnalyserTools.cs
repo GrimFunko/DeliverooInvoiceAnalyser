@@ -92,7 +92,7 @@ namespace InvoiceAnalyserLibrary
 
         public static decimal ExtractDropFees(string pdfString)
         {
-            Regex regex = new Regex(@"Drop\sFees\s[£$€]\d+\.\d{2}");
+            Regex regex = new Regex(@"Drop\s[Ff]ees\s[£$€]\d+\.\d{2}");
             Match match = regex.Match(pdfString);
 
             return match.Success ?
@@ -144,6 +144,29 @@ namespace InvoiceAnalyserLibrary
             return match.Success ?
                 (decimal.TryParse(match.Value.Remove(0, 6), out decimal output) ? 
                     output : throw new Exception("Tips match parse error.")) : 0m;
+        }
+
+        public static decimal GetTransactionFees(FileInfo fileInfo)
+        {
+            using (PdfReader reader = new PdfReader(fileInfo.FullName))
+            {
+                using (PdfDocument doc = new PdfDocument(reader))
+                {
+                    var content = PdfTextExtractor.GetTextFromPage(doc.GetLastPage());
+
+                    return ExtractTransactionFees(content);
+                }
+            }
+        }
+
+        private static decimal ExtractTransactionFees(string pdfString)
+        {
+            Regex regex = new Regex(@"Transaction\s[Ff]ee\s[£$€]-?\d+\.\d{2}");
+            Match match = regex.Match(pdfString);
+
+            return match.Success ?
+                (decimal.TryParse(match.Value.Remove(0, 17), out decimal tmp) ?
+                    tmp : throw new Exception("Transaction Fee match parse error.")) : 0m;
         }
 
         public static double GetHoursWorked(FileInfo fileInfo)
@@ -222,6 +245,7 @@ namespace InvoiceAnalyserLibrary
                         Adjustments = ExtractAdjustments(lastPage),
                         Tips = ExtractTips(lastPage),
                         DropFees = ExtractDropFees(firstPage),
+                        TransactionFee = ExtractTransactionFees(lastPage),
                         OrdersDelivered = ExtractOrdersDelivered(firstPage),
                         HoursWorked = ExtractHoursWorked(firstPage)
                     };

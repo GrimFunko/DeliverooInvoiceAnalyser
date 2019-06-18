@@ -11,6 +11,7 @@ namespace InvoiceAnalyserLibrary
         public decimal DropFees { get; set; }
         public decimal Adjustments { get; set; }
         public decimal Tips { get; set; }
+        public decimal TransactionFee { get; set; }
         public double HoursWorked { get; set; }
         public int OrdersDelivered { get; set; }
 

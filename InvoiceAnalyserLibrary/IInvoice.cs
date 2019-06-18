@@ -11,5 +11,6 @@ namespace InvoiceAnalyserLibrary
         int OrdersDelivered { get; set; }
         decimal Tips { get; set; }
         decimal? Total { get; set; }
+        decimal TransactionFee { get; set; }
     }
 }
