@@ -237,7 +237,92 @@ namespace InvoiceAnalyserLibrary.Tests
             double expected1 = 14;
             double actual1 = ia.AverageOrdersDelivered(Array.FindAll(ia.Invoices, x => (x.Date <= new DateTime(2019, 4, 5) && x.Date >= new DateTime(2018, 4, 6))));
 
+            Assert.Equal(expected1, actual1, 2);
+        }
+
+        [Fact]
+        public void TipsPerOrderReturned()
+        {
+            InvoiceAnalysis ia = new InvoiceAnalysis(fh.InvoiceFiles());
+            // All
+            decimal expected = 0.04m;
+            decimal actual = ia.TipsPerOrder();
+
+            Assert.Equal(expected, actual, 2);
+
+            // 18-19 Tax Year
+            decimal expected1 = 0;
+            decimal actual1 = ia.TipsPerOrder(Array.FindAll(ia.Invoices, x => (x.Date <= new DateTime(2019, 4, 5) && x.Date >= new DateTime(2018, 4, 6))));
+
+            Assert.Equal(expected1, actual1, 2);
+        }
+
+        [Fact]
+        public void OrdersPerTipReturned()
+        {
+            InvoiceAnalysis ia = new InvoiceAnalysis(fh.InvoiceFiles());
+            // All
+            decimal expected = 24.7m;
+            decimal actual = ia.OrdersPerTip();
+
+            Assert.Equal(expected, actual, 1);
+
+            // 18-19 Tax Year
+            decimal expected1 = 28;
+            decimal actual1 = ia.OrdersPerTip(Array.FindAll(ia.Invoices, x => (x.Date <= new DateTime(2019, 4, 5) && x.Date >= new DateTime(2018, 4, 6))));
+
             Assert.Equal(expected1, actual1, 1);
+        }
+
+        [Fact]
+        public void OrdersPerHourReturned()
+        {
+            InvoiceAnalysis ia = new InvoiceAnalysis(fh.InvoiceFiles());
+            // All
+            double expected = 1.97;
+            double actual = ia.OrdersPerHour();
+
+            Assert.Equal(expected, actual, 2);
+
+            // 18-19 Tax Year
+            double expected1 = 1.94;
+            double actual1 = ia.OrdersPerHour(Array.FindAll(ia.Invoices, x => (x.Date <= new DateTime(2019, 4, 5) && x.Date >= new DateTime(2018, 4, 6))));
+
+            Assert.Equal(expected1, actual1, 2);
+        }
+
+        [Fact]
+        public void HourlyEarningsReturned()
+        {
+            InvoiceAnalysis ia = new InvoiceAnalysis(fh.InvoiceFiles());
+            // All
+            decimal expected = 8.44m;
+            decimal actual = ia.HourlyEarnings();
+
+            Assert.Equal(expected, actual, 2);
+
+            // 18-19 Tax Year
+            decimal expected1 = 8.06m;
+            decimal actual1 = ia.HourlyEarnings(Array.FindAll(ia.Invoices, x => (x.Date <= new DateTime(2019, 4, 5) && x.Date >= new DateTime(2018, 4, 6))));
+
+            Assert.Equal(expected1, actual1, 2);
+        }
+
+        [Fact]
+        public void FeePerOrderReturned()
+        {
+            InvoiceAnalysis ia = new InvoiceAnalysis(fh.InvoiceFiles());
+            // All
+            decimal expected = 4.29m;
+            decimal actual = ia.FeesPerOrder();
+
+            Assert.Equal(expected, actual, 2);
+
+            // 18-19 Tax Year
+            decimal expected1 = 4.15m;
+            decimal actual1 = ia.FeesPerOrder(Array.FindAll(ia.Invoices, x => (x.Date <= new DateTime(2019, 4, 5) && x.Date >= new DateTime(2018, 4, 6))));
+
+            Assert.Equal(expected1, actual1, 2);
         }
     }
 }

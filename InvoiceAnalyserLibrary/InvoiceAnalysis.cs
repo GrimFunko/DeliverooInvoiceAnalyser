@@ -146,7 +146,7 @@ namespace InvoiceAnalyserLibrary
             if (count == 0)
                 count = 1;
 
-            return HoursWorked(invoices) / count;
+            return Math.Round(HoursWorked(invoices) / count, 2, MidpointRounding.AwayFromZero);
         }
 
         public decimal AverageTotal(IInvoice[] invoices = null)
@@ -161,7 +161,7 @@ namespace InvoiceAnalyserLibrary
             if (count == 0)
                 count = 1;
 
-            return val == null ? 0m : (decimal)val / count;
+            return val == null ? 0m : Math.Round((decimal)val / count, 2, MidpointRounding.AwayFromZero);
         }
 
         public decimal AverageTips(IInvoice[] invoices = null)
@@ -174,7 +174,7 @@ namespace InvoiceAnalyserLibrary
             if (count == 0)
                 count = 1;
 
-            return Tips(invoices) / count;
+            return Math.Round(Tips(invoices) / count, 2, MidpointRounding.AwayFromZero);
         }
 
         public decimal AverageDropFees(IInvoice[] invoices = null)
@@ -187,7 +187,7 @@ namespace InvoiceAnalyserLibrary
             if (count == 0)
                 count = 1;
 
-            return DropFees(invoices) / count;
+            return Math.Round(DropFees(invoices) / count, 2, MidpointRounding.AwayFromZero);
         }
 
         public double AverageOrdersDelivered(IInvoice[] invoices = null)
@@ -200,7 +200,44 @@ namespace InvoiceAnalyserLibrary
             if (count == 0)
                 count = 1;
 
-            return (double)OrdersDelivered(invoices) / count;
+            return Math.Round((double)OrdersDelivered(invoices) / count, 2, MidpointRounding.AwayFromZero);
+        }
+
+        public decimal TipsPerOrder(IInvoice[] invoices = null)
+        {
+            var orders = OrdersDelivered(invoices);
+
+            return orders == 0 ? 0 : Math.Round(Tips(invoices) / orders, 2, MidpointRounding.AwayFromZero);
+        }
+
+        public decimal OrdersPerTip(IInvoice[] invoices = null)
+        {
+            var tips = Tips(invoices);
+            var orders = (decimal)OrdersDelivered(invoices);
+
+            return tips == 0 ? orders : Math.Round(orders / tips, 2, MidpointRounding.AwayFromZero);
+        }
+
+        public double OrdersPerHour(IInvoice[] invoices = null)
+        {
+            var hours = HoursWorked(invoices);
+            return hours == 0 ? 0 : Math.Round(OrdersDelivered(invoices) / hours, 2, MidpointRounding.AwayFromZero);
+        }
+
+        public decimal HourlyEarnings(IInvoice[] invoices = null)
+        {
+            var hours = HoursWorked(invoices);
+            var fees = DropFees(invoices);
+
+            return hours == 0 ? fees :Math.Round(fees / (decimal)hours, 2, MidpointRounding.AwayFromZero);
+        }
+
+        public decimal FeesPerOrder(IInvoice[] invoices = null)
+        {
+            var fees = DropFees(invoices);
+            var orders = OrdersDelivered(invoices);
+
+            return orders == 0 ? 0 : Math.Round(fees / orders, 2, MidpointRounding.AwayFromZero); 
         }
     }
 }
