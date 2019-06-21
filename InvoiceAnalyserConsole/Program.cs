@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using InvoiceAnalyserLibrary;
 
 namespace InvoiceAnalyserConsole
@@ -8,10 +9,16 @@ namespace InvoiceAnalyserConsole
     {
         static void Main(string[] args)
         {
+            ExecuteProgram(args);
+
+        }
+
+        private static void ExecuteProgram(string[] args = null)
+        {
             Console.WriteLine("Hello! \n\nBefore we begin, please make sure all invoices are downloaded and share the same root folder folder e.g. downloads.\n");
             FileHandler handler = OpenFileHandler();
             Console.Clear();
-            Console.WriteLine("The application will now try to rename and organise your invoices.");
+            Console.WriteLine("The application will now try to rename and organise your invoices.\nIf you have already completed this step, press y to continue to analysis.");
             ConfirmationPrompt();
             handler.OrganiseFiles();
             Console.Clear();
@@ -39,7 +46,6 @@ namespace InvoiceAnalyserConsole
                 Console.ReadKey();
             }
             while (AnotherDate());
-
         }
 
         private static bool AnotherDate()
@@ -168,8 +174,10 @@ namespace InvoiceAnalyserConsole
 
             else
             {
-                Console.WriteLine("Ok, application exiting.");
-                Environment.Exit(0);
+                Console.WriteLine("Ok, restarting application.");
+                System.Threading.Thread.Sleep(1500);
+                Console.Clear();
+                ExecuteProgram();
             }
 
         }
