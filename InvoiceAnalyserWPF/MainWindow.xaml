@@ -1,0 +1,43 @@
+﻿<Window x:Class="InvoiceAnalyserWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:InvoiceAnalyserWPF"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="380" Width="600">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="20"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="10"/>
+        </Grid.RowDefinitions>
+        <Label HorizontalAlignment="Center" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="5" VerticalAlignment="Top"
+                Content="Please type in, or select where your invoices are located." />
+
+        <TextBox HorizontalAlignment="Center" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="5" VerticalAlignment="Bottom"
+            Width="380" Height="20" TextAlignment="Center" Text="e.g. C:\Users\John\Downloads" x:Name="directoryPath"/>
+        <Button Content="Browse..." Grid.Column="7" Grid.Row="2" Height="20" Width="65" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+        <TextBlock HorizontalAlignment="Center" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="5" VerticalAlignment="Top"
+              x:Name="noteText" TextWrapping="WrapWithOverflow" />
+        <Button Content="Organise" Grid.Column="3" Grid.Row="4" VerticalAlignment="Center"/>
+        <Button Content="Analyse" Grid.Column="5" Grid.Row="4" VerticalAlignment="Center"/>
+        <Label Content="Directory does not exist!" x:Name="errorMessage" Foreground="Red" Visibility="Hidden"
+               Grid.Column="3" Grid.ColumnSpan="3" Grid.Row="5" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+    </Grid>
+</Window>

@@ -5,11 +5,13 @@ VisualStudioVersion = 16.0.28922.388
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvoiceAnalyserForm", "DeliverooInvoiceAnalyserForms\InvoiceAnalyserForm.csproj", "{BD5D58E2-5A5A-40E3-AFA3-D553C606513F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvoiceAnalyserLibrary", "InvoiceAnalyserLibrary\InvoiceAnalyserLibrary.csproj", "{42399CBA-50F0-4181-A2CE-CACF113D2B97}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InvoiceAnalyserLibrary", "InvoiceAnalyserLibrary\InvoiceAnalyserLibrary.csproj", "{42399CBA-50F0-4181-A2CE-CACF113D2B97}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvoiceAnalyserConsole", "InvoiceAnalyserConsole\InvoiceAnalyserConsole.csproj", "{059C7510-8271-4A9F-AB81-4C50E2A37EFF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InvoiceAnalyserConsole", "InvoiceAnalyserConsole\InvoiceAnalyserConsole.csproj", "{059C7510-8271-4A9F-AB81-4C50E2A37EFF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvoiceAnalyserLibrary.Tests", "InvoiceAnalyserLibrary.Tests\InvoiceAnalyserLibrary.Tests.csproj", "{DAD91CAF-407D-482C-A4DD-24B22057E0AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InvoiceAnalyserLibrary.Tests", "InvoiceAnalyserLibrary.Tests\InvoiceAnalyserLibrary.Tests.csproj", "{DAD91CAF-407D-482C-A4DD-24B22057E0AD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvoiceAnalyserWPF", "InvoiceAnalyserWPF\InvoiceAnalyserWPF.csproj", "{209052F9-BDC1-4F23-8E9E-09DBCF8E9982}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{DAD91CAF-407D-482C-A4DD-24B22057E0AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DAD91CAF-407D-482C-A4DD-24B22057E0AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DAD91CAF-407D-482C-A4DD-24B22057E0AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{209052F9-BDC1-4F23-8E9E-09DBCF8E9982}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{209052F9-BDC1-4F23-8E9E-09DBCF8E9982}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{209052F9-BDC1-4F23-8E9E-09DBCF8E9982}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{209052F9-BDC1-4F23-8E9E-09DBCF8E9982}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
