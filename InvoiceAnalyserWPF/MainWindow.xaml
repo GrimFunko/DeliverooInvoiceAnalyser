@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:InvoiceAnalyserWPF"
         mc:Ignorable="d"
         Title="MainWindow" Height="380" Width="600">
-    <Grid>
+    <Grid FocusManager.FocusedElement="{Binding ElementName=directoryPath}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20"/>
             <ColumnDefinition Width="*"/>
@@ -31,12 +31,16 @@
                 Content="Please type in, or select where your invoices are located." />
 
         <TextBox HorizontalAlignment="Center" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="5" VerticalAlignment="Bottom"
-            Width="380" Height="20" TextAlignment="Center" Text="e.g. C:\Users\John\Downloads" x:Name="directoryPath"/>
-        <Button Content="Browse..." Grid.Column="7" Grid.Row="2" Height="20" Width="65" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
-        <TextBlock HorizontalAlignment="Center" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="5" VerticalAlignment="Top"
-              x:Name="noteText" TextWrapping="WrapWithOverflow" />
-        <Button Content="Organise" Grid.Column="3" Grid.Row="4" VerticalAlignment="Center"/>
-        <Button Content="Analyse" Grid.Column="5" Grid.Row="4" VerticalAlignment="Center"/>
+            Width="380" Height="20" TextAlignment="Center" Text="" x:Name="directoryPath"/>
+        <Button Content="Browse..." Grid.Column="7" Grid.Row="2" Height="20" Width="65" HorizontalAlignment="Left" VerticalAlignment="Bottom"
+                x:Name="browseButton"/>
+        <Label Content="E.g" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+        <Label HorizontalAlignment="Left" Grid.Row="3" Grid.Column="3" Grid.ColumnSpan="4" VerticalAlignment="Top"
+              x:Name="examplePath" FontStyle="Italic" />
+        <Label HorizontalAlignment="Left" Grid.Row="3" Grid.Column="3" Grid.ColumnSpan="4" VerticalAlignment="Top"
+              x:Name="examplePath2" FontStyle="Italic" Margin="0,20,0,0" />
+        <Button x:Name="organiseButton" Content="Organise" Grid.Column="3" Grid.Row="4" VerticalAlignment="Center"/>
+        <Button x:Name="analyseButton" Content="Analyse" Grid.Column="5" Grid.Row="4" VerticalAlignment="Center"/>
         <Label Content="Directory does not exist!" x:Name="errorMessage" Foreground="Red" Visibility="Hidden"
                Grid.Column="3" Grid.ColumnSpan="3" Grid.Row="5" HorizontalAlignment="Center" VerticalAlignment="Top"/>
     </Grid>

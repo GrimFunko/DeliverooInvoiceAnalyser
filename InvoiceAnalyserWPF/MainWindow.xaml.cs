@@ -14,6 +14,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using System.Windows.Forms;
+using InvoiceAnalyserLibrary;
+
 namespace InvoiceAnalyserWPF
 {
     /// <summary>
@@ -25,8 +28,8 @@ namespace InvoiceAnalyserWPF
         {
             InitializeComponent();
 
-            noteText.Text = @"*If you have run this program before, this should be the folder that contains 'Deliveroo Invoices', NOT the folder itself." +
-                    "\n" +@"I.e. if 'C:\Desktop\Deliveroo Invoices' exists, select 'C:\Desktop'";
+            examplePath.Content = @"C:\Users\John\Downloads";
+            examplePath2.Content = @"C:\Users\Jane\Desktop\Deliveroo Invoices";
 
             this.MaxHeight = Height;
             this.MaxWidth = Width;
@@ -34,6 +37,29 @@ namespace InvoiceAnalyserWPF
             this.MinWidth = Width;
 
             directoryPath.TextChanged += DirectoryPath_TextChanged;
+            browseButton.Click += BrowseButton_Click;
+            organiseButton.Click += OrganiseButton_Click;
+        }
+
+        private void OrganiseButton_Click(object sender, RoutedEventArgs e)
+        {
+            ConfirmationPromptWindow confirm = new ConfirmationPromptWindow("The program will attempt to rename and reorganise your invoices. No files or folders will be deleted in the process.");
+            confirm.ConfirmationGiven += Confirm_ConfirmationGiven;
+            confirm.ShowDialog();
+         
+        }
+
+        private void Confirm_ConfirmationGiven(object sender, EventArgs e)
+        {
+            FileHandler handler = new FileHandler(directoryPath.Text);
+            handler.OrganiseFiles();
+        }
+
+        private void BrowseButton_Click(object sender, RoutedEventArgs e)
+        {
+            var folderBrowser = new FolderBrowserDialog();
+            folderBrowser.ShowDialog();
+            directoryPath.Text = string.IsNullOrEmpty(folderBrowser.SelectedPath) ? directoryPath.Text : folderBrowser.SelectedPath;
         }
 
         private void DirectoryPath_TextChanged(object sender, TextChangedEventArgs e)

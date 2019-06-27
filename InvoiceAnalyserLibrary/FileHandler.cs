@@ -15,7 +15,8 @@ namespace InvoiceAnalyserLibrary
         public FileHandler(string _directoryPath)
         {
             SelectedDirectory = new DirectoryInfo(_directoryPath);
-            WorkingInvoiceDirectory = new DirectoryInfo(_directoryPath + "/Deliveroo Invoices");
+            
+            WorkingInvoiceDirectory = SelectedDirectory.Name.Contains("Deliveroo Invoices") ? SelectedDirectory : new DirectoryInfo(_directoryPath + "/Deliveroo Invoices");
         }
 
         public FileInfo[] PDFFiles()
