@@ -64,8 +64,9 @@ namespace InvoiceAnalyserLibrary
 
         public void OrganiseFiles()
         {
+            var irt = InvoiceRenamingTargets();
             CreateInvoiceDirectory();
-            foreach(FileInfo invoice in InvoiceRenamingTargets())
+            foreach(FileInfo invoice in irt)
             {
                 var date = AnalyserTools.GetDate(invoice);
                 var TaxYear = AnalyserTools.IdentifyTaxYear(date);
@@ -110,7 +111,23 @@ namespace InvoiceAnalyserLibrary
             return output.ToArray();
         }
 
-        public bool IsInvoice(string fileName)
+        public static FileInfo[] InvoiceFiles(string directoryPath)
+        {
+            var pdfs = PDFFiles(new DirectoryInfo(directoryPath));
+            if (pdfs == null || pdfs.Length == 0)
+                throw new Exception("No PDFs found.");
+
+            List<FileInfo> output = new List<FileInfo>();
+            foreach (FileInfo file in pdfs)
+            {
+                if (IsInvoice(file.Name))
+                    output.Add(file);
+            }
+
+            return output.ToArray();
+        }
+
+        public static bool IsInvoice(string fileName)
         {
             Regex reg = new Regex(@"^Invoice \d{4}-\d{2}-\d{2}\.pdf$");
 

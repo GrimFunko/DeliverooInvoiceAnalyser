@@ -1,0 +1,72 @@
+﻿<Window x:Class="InvoiceAnalyserWPF.AnalysisWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:InvoiceAnalyserWPF"
+        mc:Ignorable="d"
+        Title="Invoice Analysis" Height="560" Width="1060">
+    <Grid x:Name="PageLayout_Grid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="10"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="10"/>
+        </Grid.RowDefinitions>
+        <Grid x:Name="TopLeftQuad_Grid" Grid.Row="1" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Content="Start Date:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
+            <DatePicker x:Name="startDate"  Grid.Row="0" Grid.Column="1" VerticalAlignment="Center"/>
+            <Label Content="End Date:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
+            <DatePicker x:Name="endDate"  Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"/>
+            <Button x:Name="analyseButton" Content="Analyse" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" Grid.RowSpan="2" VerticalAlignment="Center" Width="100"/>
+        </Grid>
+        <Grid x:Name="TopRightQuad_Grid" Grid.Row="1" Grid.Column="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+            <Label Content="Invoice Count:" Grid.Column="0" FontSize="20" />
+            <Label x:Name="invoiceCount" Grid.Column="1" FontSize="20"/>
+        </Grid>
+        <Grid x:Name="BotLeftQuad_Grid" Grid.Column="1" Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <GroupBox x:Name="selectedInvoicesGroupBox" Header="Selected Invoices" Grid.Row="0" >
+                <ScrollViewer x:Name="selectedInvoicesScroll">
+                    <ListView x:Name="selectedInvoicesContainer" ItemsSource="{Binding SelectedInvoices, NotifyOnSourceUpdated=True}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Date, StringFormat='{}{0:ddd, dd MMM yyyy}'}" VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </ScrollViewer>
+            </GroupBox>
+            <GroupBox x:Name="allInvoicesGroupBox" Header="All Invoices" Grid.Row="1">
+                <ScrollViewer x:Name="allInvoicesScroll">
+                    <StackPanel x:Name="allInvoicesContainer">
+                        <CheckBox x:Name="selectALL" Content="Select ALL" IsChecked="False" IsThreeState="True" Checked="SelectALL_CheckChanged" Unchecked="SelectALL_CheckChanged"/>
+                    </StackPanel>
+                </ScrollViewer>
+            </GroupBox>
+        </Grid>
+    </Grid>
+</Window>

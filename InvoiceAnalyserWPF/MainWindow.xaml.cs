@@ -39,20 +39,47 @@ namespace InvoiceAnalyserWPF
             directoryPath.TextChanged += DirectoryPath_TextChanged;
             browseButton.Click += BrowseButton_Click;
             organiseButton.Click += OrganiseButton_Click;
+            analyseButton.Click += AnalyseButton_Click;
         }
+
+        private void AnalyseButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!Directory.Exists(directoryPath.Text))
+            {
+                errorMessage.Visibility = Visibility.Visible;
+                return;
+            }
+            InvoiceAnalysis IA = new InvoiceAnalysis(FileHandler.InvoiceFiles(directoryPath.Text));
+            AnalysisWindow aWindow = new AnalysisWindow(IA);
+            aWindow.Show();
+            this.Close();
+        }
+
 
         private void OrganiseButton_Click(object sender, RoutedEventArgs e)
         {
+            if(!Directory.Exists(directoryPath.Text))
+            {
+                errorMessage.Visibility = Visibility.Visible;
+                return;
+            }
             ConfirmationPromptWindow confirm = new ConfirmationPromptWindow("The program will attempt to rename and reorganise your invoices. No files or folders will be deleted in the process.");
-            confirm.ConfirmationGiven += Confirm_ConfirmationGiven;
-            confirm.ShowDialog();
-         
+            confirm.ConfirmationGiven += OrganiseConfirm_ConfirmationGiven;
+            confirm.ShowDialog();  
         }
 
-        private void Confirm_ConfirmationGiven(object sender, EventArgs e)
+        private void OrganiseConfirm_ConfirmationGiven(object sender, EventArgs e)
         {
             FileHandler handler = new FileHandler(directoryPath.Text);
-            handler.OrganiseFiles();
+            try
+            {
+                handler.OrganiseFiles();
+            }
+            catch (Exception ex)
+            {
+                ErrorPromptWindow error = new ErrorPromptWindow(ex.Message);
+                error.ShowDialog();
+            }
         }
 
         private void BrowseButton_Click(object sender, RoutedEventArgs e)

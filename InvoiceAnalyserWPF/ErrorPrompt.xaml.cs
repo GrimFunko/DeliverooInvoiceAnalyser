@@ -17,14 +17,12 @@ namespace InvoiceAnalyserWPF
     /// <summary>
     /// Interaction logic for ConfirmationPromptWindow.xaml
     /// </summary>
-    public partial class ConfirmationPromptWindow : Window
+    public partial class ErrorPromptWindow : Window
     {
-        public event EventHandler<EventArgs> ConfirmationGiven;
-        public ConfirmationPromptWindow(string _promptMessage)
+        public ErrorPromptWindow(string _promptMessage)
         {
             InitializeComponent();
             promptMessage.Text = _promptMessage;
-            cancelButton.Click += CancelButton_Click;
             okButton.Click += OkButton_Click;
 
 
@@ -38,13 +36,8 @@ namespace InvoiceAnalyserWPF
 
         private void OkButton_Click(object sender, RoutedEventArgs e)
         {
-            ConfirmationGiven?.Invoke(this, EventArgs.Empty);
             this.Close();
         }
 
-        private void CancelButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
     }
 }
