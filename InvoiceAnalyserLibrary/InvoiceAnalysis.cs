@@ -133,7 +133,7 @@ namespace InvoiceAnalyserLibrary
             foreach (var inv in invoices)
                 output += inv.HoursWorked;
 
-            return output;
+            return Math.Round(output,1,MidpointRounding.AwayFromZero);
         }
 
         public double AverageHoursWorked(IInvoice[] invoices = null)

@@ -14,6 +14,8 @@ namespace InvoiceAnalyserLibrary
         public decimal TransactionFee { get; set; }
         public double HoursWorked { get; set; }
         public int OrdersDelivered { get; set; }
-
+        public string FilePath { get; set; }
+        public Dictionary<DayOfWeek, int> OrdersByDay { get; set; }
+        public Dictionary<DayOfWeek, double> HoursByDay { get; set; }
     }
 }

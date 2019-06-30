@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace InvoiceAnalyserLibrary
 {
@@ -12,5 +13,8 @@ namespace InvoiceAnalyserLibrary
         decimal Tips { get; set; }
         decimal? Total { get; set; }
         decimal TransactionFee { get; set; }
+        string FilePath { get; set; }
+        Dictionary<DayOfWeek, int> OrdersByDay { get; set; }
+        Dictionary<DayOfWeek, double> HoursByDay { get; set; }
     }
 }

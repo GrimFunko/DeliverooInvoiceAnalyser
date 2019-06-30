@@ -123,11 +123,11 @@ namespace InvoiceAnalyserLibrary.Tests
             string exampleFileName5 = "Invoice 19-01-01.pdf";
 
 
-            Assert.True(fh.IsInvoice(exampleFileName));
-            Assert.False(fh.IsInvoice(exampleFileName2));
-            Assert.False(fh.IsInvoice(exampleFileName3));
-            Assert.False(fh.IsInvoice(exampleFileName4));
-            Assert.False(fh.IsInvoice(exampleFileName5));
+            Assert.True(FileHandler.IsInvoice(exampleFileName));
+            Assert.False(FileHandler.IsInvoice(exampleFileName2));
+            Assert.False(FileHandler.IsInvoice(exampleFileName3));
+            Assert.False(FileHandler.IsInvoice(exampleFileName4));
+            Assert.False(FileHandler.IsInvoice(exampleFileName5));
         }
     }
 }

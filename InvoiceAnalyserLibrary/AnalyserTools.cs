@@ -230,6 +230,84 @@ namespace InvoiceAnalyserLibrary
             return sum;
         }
 
+        public static Dictionary<DayOfWeek, int> GetOrdersByDay(FileInfo fileInfo)
+        {
+            using (PdfReader reader = new PdfReader(fileInfo.FullName))
+            {
+                using (PdfDocument doc = new PdfDocument(reader))
+                {
+                    var content = PdfTextExtractor.GetTextFromPage(doc.GetFirstPage());
+
+                    return ExtractOrdersByDay(content);
+                }
+            }
+        }
+
+        private static Dictionary<DayOfWeek, int> ExtractOrdersByDay(string content)
+        {
+            Dictionary<DayOfWeek, int> output = new Dictionary<DayOfWeek, int>();
+            foreach(var day in Enum.GetValues(typeof(DayOfWeek)))
+            {
+                var matches = DayDetails((DayOfWeek)day, content);
+                if (matches.Count == 0)
+                {
+                    output.Add((DayOfWeek)day, 0);
+                    continue;
+                }
+
+                int orderSum = 0;
+                foreach (Match match in matches)
+                {
+                    orderSum += ExtractOrdersDelivered(match.Value);
+                }
+                output.Add((DayOfWeek)day, orderSum);
+            }
+            return output;
+        }
+
+        public static Dictionary<DayOfWeek, double> GetHoursWorkedByDay(FileInfo fileInfo)
+        {
+            using (PdfReader reader = new PdfReader(fileInfo.FullName))
+            {
+                using (PdfDocument doc = new PdfDocument(reader))
+                {
+                    var content = PdfTextExtractor.GetTextFromPage(doc.GetFirstPage());
+
+                    return ExtractHoursWorkedByDay(content);
+                }
+            }
+        }
+
+        private static Dictionary<DayOfWeek, double> ExtractHoursWorkedByDay(string content)
+        {
+            Dictionary<DayOfWeek, double> output = new Dictionary<DayOfWeek, double>();
+            foreach (var day in Enum.GetValues(typeof(DayOfWeek)))
+            {
+                var matches = DayDetails((DayOfWeek)day, content);
+                if (matches.Count == 0)
+                {
+                    output.Add((DayOfWeek)day, 0);
+                    continue;
+                }
+
+                double orderSum = 0;
+                foreach (Match match in matches)
+                {
+                    orderSum += ExtractHoursWorked(match.Value);
+                }
+                output.Add((DayOfWeek)day, orderSum);
+            }
+            return output;
+        }
+
+        public static MatchCollection DayDetails(DayOfWeek day, string invoice)
+        {
+            Regex reg = new Regex(day + @"\s\d{2}\s\w{3,9}\s\d{4}\s\d{2}:\d{2}\s\d{2}:\d{2}\s\d{1,2}\.\dh\s\d+:\s£\d+\.\d+");
+            MatchCollection matches = reg.Matches(invoice);
+
+            return matches;
+        }
+
         public static IInvoice GetInvoiceModel(FileInfo fileInfo)
         {
             using (PdfReader reader = new PdfReader(fileInfo.FullName))
@@ -247,7 +325,10 @@ namespace InvoiceAnalyserLibrary
                         DropFees = ExtractDropFees(firstPage),
                         TransactionFee = ExtractTransactionFees(lastPage),
                         OrdersDelivered = ExtractOrdersDelivered(firstPage),
-                        HoursWorked = ExtractHoursWorked(firstPage)
+                        HoursWorked = ExtractHoursWorked(firstPage),
+                        FilePath = fileInfo.FullName,
+                        OrdersByDay = ExtractOrdersByDay(firstPage),
+                        HoursByDay = ExtractHoursWorkedByDay(firstPage)
                     };
 
                 }

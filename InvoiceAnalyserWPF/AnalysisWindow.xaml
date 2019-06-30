@@ -6,6 +6,11 @@
         xmlns:local="clr-namespace:InvoiceAnalyserWPF"
         mc:Ignorable="d"
         Title="Invoice Analysis" Height="560" Width="1060">
+    <Window.Resources>
+        <Style x:Key="ItemDoubleClick" TargetType="ListViewItem">
+            <EventSetter Event="MouseDoubleClick" Handler="SelectedInvoicesContainer_MouseDoubleClick"/>
+        </Style>
+    </Window.Resources>
     <Grid x:Name="PageLayout_Grid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10"/>
@@ -41,20 +46,18 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
-            <Label Content="Invoice Count:" Grid.Column="0" FontSize="20" />
-            <Label x:Name="invoiceCount" Grid.Column="1" FontSize="20"/>
         </Grid>
         <Grid x:Name="BotLeftQuad_Grid" Grid.Column="1" Grid.Row="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <GroupBox x:Name="selectedInvoicesGroupBox" Header="Selected Invoices" Grid.Row="0" >
+            <GroupBox x:Name="selectedInvoicesGroupBox" Header="Selected Invoices (0)" Grid.Row="0" >
                 <ScrollViewer x:Name="selectedInvoicesScroll">
-                    <ListView x:Name="selectedInvoicesContainer" ItemsSource="{Binding SelectedInvoices, NotifyOnSourceUpdated=True}">
+                    <ListView x:Name="selectedInvoicesContainer" ItemsSource="{Binding SelectedInvoices, NotifyOnSourceUpdated=True}" BorderBrush="Transparent" ItemContainerStyle="{StaticResource ItemDoubleClick}">
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Date, StringFormat='{}{0:ddd, dd MMM yyyy}'}" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Date, StringFormat='{}{0:ddd, dd MMM yyyy}'}" VerticalAlignment="Center" />
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
@@ -68,5 +71,108 @@
                 </ScrollViewer>
             </GroupBox>
         </Grid>
+        <TabControl Grid.Row="2" Grid.Column="2" Margin="0, -12, 0, 0" BorderBrush="Transparent">
+            <TabItem x:Name="totalsTab" Header="Totals" Width="120">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="8*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="12"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="7*"/>
+                        </Grid.RowDefinitions>
+                        
+                        <Label Content="Hours Worked" Grid.Row="1" Grid.Column="0" FontSize="12" VerticalAlignment="Center"/>
+                        <Label Content="Orders Delivered" Grid.Row="2" Grid.Column="0" FontSize="12" VerticalAlignment="Center"/>
+                        <Label Content="Drop Fees" Grid.Row="3" Grid.Column="0" FontSize="12" VerticalAlignment="Center" />
+                        <Label Content="Tips" Grid.Row="4" Grid.Column="0" FontSize="12" VerticalAlignment="Center" />
+                        <Label Content="Adjustments" Grid.Row="5" Grid.Column="0" FontSize="12" VerticalAlignment="Center" />
+                        <Label Content="Transaction Fees" Grid.Row="6" Grid.Column="0" FontSize="12" VerticalAlignment="Center"/>
+                        <Label Content="Total" FontWeight="Bold" Grid.Row="7" Grid.Column="0" FontSize="12" VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding HoursWorked}" FontSize="12" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding OrdersDelivered}" FontSize="12" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding DropFees, StringFormat='£{0}'}" FontSize="12" Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding Tips, StringFormat='£{0}'}" FontSize="12" Grid.Row="4" Grid.Column="2" VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding Adjustments, StringFormat='£{0}'}" FontSize="12" Grid.Row="5" Grid.Column="2" VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding TransactionFees, StringFormat='£{0}'}" FontSize="12" Grid.Row="6" Grid.Column="2" VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding Total, StringFormat='£{0}'}" FontSize="12" Grid.Row="7" Grid.Column="2" VerticalAlignment="Center" />
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <ComboBox Grid.Row="0" Grid.Column="2" VerticalAlignment="Center"/>
+                        <Label Content="Graph:" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right"/>
+                    </Grid>
+                </Grid>
+
+            </TabItem>
+            <TabItem x:Name="averagesTab" Header="Averages" Width="120">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="8*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="12"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="5*"/>
+                        </Grid.RowDefinitions>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="statisticsTab" Header="Statistics" Width="120">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="8*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="12"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="5*"/>
+                        </Grid.RowDefinitions>
+                    </Grid>
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>
