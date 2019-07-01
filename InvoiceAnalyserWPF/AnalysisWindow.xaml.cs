@@ -34,6 +34,7 @@ namespace InvoiceAnalyserWPF
             }
         }
 
+        #region BindableProperties
         private double _hoursWorked;
         public double HoursWorked
         {
@@ -111,8 +112,150 @@ namespace InvoiceAnalyserWPF
             }
         }
 
+        private double _averageOrdersDelivered;
+        public double AverageOrdersDelivered
+        {
+            get { return _averageOrdersDelivered; }
+            set
+            {
+                _averageOrdersDelivered = value;
+                OnPropertyChanged("AverageOrdersDelivered");
+            }
+        }
 
+        private double _averageHoursWorked;
+        public double AverageHoursWorked
+        {
+            get { return _averageHoursWorked; }
+            set
+            {
+                _averageHoursWorked = value;
+                OnPropertyChanged("AverageHoursWorked");
+            }
+        }
 
+        private decimal _averageDropFees;
+        public decimal AverageDropFees
+        {
+            get { return _averageDropFees; }
+            set
+            {
+                _averageDropFees = value;
+                OnPropertyChanged("AverageDropFees");
+            }
+        }
+
+        private decimal _averageTips;
+        public decimal AverageTips
+        {
+            get { return _averageTips; }
+            set
+            {
+                _averageTips = value;
+                OnPropertyChanged("AverageTips");
+            }
+        }
+
+        private decimal? _averageTotal;
+        public decimal? AverageTotal
+        {
+            get { return _averageTotal; }
+            set
+            {
+                _averageTotal = value;
+                OnPropertyChanged("AverageTotal");
+            }
+        }
+
+        private decimal _hourlyEarnings;
+        public decimal HourlyEarnings
+        {
+            get { return _hourlyEarnings; }
+            set
+            {
+                _hourlyEarnings = value;
+                OnPropertyChanged("HourlyEarnings");
+            }
+        }
+
+        private double _ordersPerHour;
+        public double OrdersPerHour
+        {
+            get { return _ordersPerHour; }
+            set
+            {
+                _ordersPerHour = value;
+                OnPropertyChanged("OrdersPerHour");
+            }
+        }
+
+        private decimal _averageOrderFee;
+        public decimal AverageOrderFee
+        {
+            get { return _averageOrderFee; }
+            set
+            {
+                _averageOrderFee = value;
+                OnPropertyChanged("AverageOrderFee");
+            }
+        }
+
+        private decimal _averageTipPerOrder;
+        public decimal AverageTipPerOrder
+        {
+            get { return _averageTipPerOrder; }
+            set
+            {
+                _averageTipPerOrder = value;
+                OnPropertyChanged("AverageTipPerOrder");
+            }
+        }
+
+        private decimal _ordersPerTip;
+        public decimal OrdersPerTip
+        {
+            get { return _ordersPerTip; }
+            set
+            {
+                _ordersPerTip = value;
+                OnPropertyChanged("OrdersPerTip");
+            }
+        }
+
+        private int _daysWorked;
+        public int DaysWorked
+        {
+            get { return _daysWorked; }
+            set
+            {
+                _daysWorked = value;
+                OnPropertyChanged("DaysWorked");
+            }
+        }
+
+        private double _averageShiftDeliveries;
+        public double AverageShiftDeliveries
+        {
+            get { return _averageShiftDeliveries; }
+            set
+            {
+                _averageShiftDeliveries = value;
+                OnPropertyChanged("AverageShiftDeliveries");
+            }
+        }
+
+        private double _averageShiftLength;
+        public double AverageShiftLength
+        {
+            get { return _averageShiftLength; }
+            set
+            {
+                _averageShiftLength = value;
+                OnPropertyChanged("AverageShiftLength");
+            }    
+        }
+
+        #endregion
 
         public AnalysisWindow(InvoiceAnalysis invoiceAnalysis)
         {
@@ -124,6 +267,11 @@ namespace InvoiceAnalyserWPF
             analyseButton.Click += AnalyseButton_Click;
             SelectedInvoices.ListChanged += AnalysisWindow_SelectedInvoicesChanged;
             PopulateAllInvoicesContainer();
+
+            MinHeight = Height;
+            MaxHeight = Height;
+            MinWidth = Width;
+            MaxWidth = Width;
         }
 
         private void RefreshProperties()
@@ -136,6 +284,19 @@ namespace InvoiceAnalyserWPF
             Adjustments = Analyser.Adjustments(ia);
             TransactionFees = Analyser.TransactionFees(ia);
             Total = Analyser.Total(ia);
+            AverageHoursWorked = Analyser.AverageHoursWorked(ia);
+            AverageOrdersDelivered = Analyser.AverageOrdersPerInvoice(ia);
+            AverageDropFees = Analyser.AverageDropFees(ia);
+            AverageTips = Analyser.AverageTips(ia);
+            AverageTotal = Analyser.AverageTotal(ia);
+            HourlyEarnings = Analyser.HourlyEarnings(ia);
+            OrdersPerHour = Analyser.OrdersPerHour(ia);
+            AverageOrderFee = Analyser.AverageOrderFee(ia);
+            AverageTipPerOrder = Analyser.TipPerOrder(ia);
+            OrdersPerTip = Analyser.OrdersPerTip(ia);
+            DaysWorked = Analyser.DaysWorked(ia);
+            AverageShiftDeliveries = Analyser.AverageOrdersPerShift(ia);
+            AverageShiftLength = Analyser.AverageShiftLength(ia);
         }
 
         private void AnalysisWindow_SelectedInvoicesChanged(object sender, EventArgs e)

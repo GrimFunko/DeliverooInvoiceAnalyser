@@ -84,12 +84,12 @@ namespace InvoiceAnalyserConsole
                 $"\nAdjustments: £{analyser.Adjustments(invoices)} \nTransaction Fees: £{analyser.TransactionFees(invoices)} \nHours Worked: {analyser.HoursWorked(invoices)}h\n");
             WriteBar();
             Console.WriteLine("*AVERAGES*\n");
-            Console.WriteLine($"Average Total: £{analyser.AverageTotal(invoices)} \nAverage Orders Delivered: {analyser.AverageOrdersDelivered(invoices)} " +
+            Console.WriteLine($"Average Total: £{analyser.AverageTotal(invoices)} \nAverage Orders Delivered: {analyser.AverageOrdersPerInvoice(invoices)} " +
                 $"\nAverage Drop Fees: £{analyser.AverageDropFees(invoices)} \nAverage Tips: £{analyser.AverageTips(invoices)} \nAverage Hours Worked: {analyser.AverageHoursWorked(invoices)}h\n");
             WriteBar();
             Console.WriteLine("*STATS*\n");
-            Console.WriteLine($"Hourly Earnings: £{analyser.HourlyEarnings(invoices)} p/h \nOrders per Hour: {analyser.OrdersPerHour(invoices)} p/h \nFee per Order: £{analyser.FeesPerOrder(invoices)} \n" +
-                $"Tips per Order: £{analyser.TipsPerOrder(invoices)} \nOrders per £1 Tip: {analyser.OrdersPerTip(invoices)}\n");
+            Console.WriteLine($"Hourly Earnings: £{analyser.HourlyEarnings(invoices)} p/h \nOrders per Hour: {analyser.OrdersPerHour(invoices)} p/h \nFee per Order: £{analyser.AverageOrderFee(invoices)} \n" +
+                $"Tips per Order: £{analyser.TipPerOrder(invoices)} \nOrders per £1 Tip: {analyser.OrdersPerTip(invoices)}\n");
 
             
         }

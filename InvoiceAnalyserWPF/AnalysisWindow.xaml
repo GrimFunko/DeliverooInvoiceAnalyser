@@ -42,10 +42,16 @@
         </Grid>
         <Grid x:Name="TopRightQuad_Grid" Grid.Row="1" Grid.Column="2">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
+            <TextBlock Text="Info:" FontSize="12" FontWeight="Bold" HorizontalAlignment="Right" Margin="0,5,0,0" />
+            <TextBlock Padding="5,0,5,0" Grid.Column="1" FontSize="11" TextWrapping="Wrap" Margin="0,5,0,0">
+                To get started, please either select invoices manually by ticking desired items in the ‘All Invoice’ box, or input a start
+                and/or end date. <LineBreak/>Note that UK Tax years run from <Bold>6th April to 5th April the following year</Bold>.<LineBreak/> If there are no invoices in the
+                All Invoice box, you may need to restart the program and ensure the correct directory is selected on the initial screen.
+                <LineBreak/><Bold>Warning!</Bold> Average values may be affected by varying invoice periods, and therefore must be treated with caution.
+            </TextBlock>
         </Grid>
         <Grid x:Name="BotLeftQuad_Grid" Grid.Column="1" Grid.Row="2">
             <Grid.RowDefinitions>
@@ -75,41 +81,46 @@
             <TabItem x:Name="totalsTab" Header="Totals" Width="120">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="3*"/>
-                        <ColumnDefinition Width="8*"/>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="11*"/>
                     </Grid.ColumnDefinitions>
                     <Grid Grid.Column="0">
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*"/>
                             <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="12"/>
-                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30"/>
                             <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="7*"/>
                         </Grid.RowDefinitions>
-                        
-                        <Label Content="Hours Worked" Grid.Row="1" Grid.Column="0" FontSize="12" VerticalAlignment="Center"/>
-                        <Label Content="Orders Delivered" Grid.Row="2" Grid.Column="0" FontSize="12" VerticalAlignment="Center"/>
-                        <Label Content="Drop Fees" Grid.Row="3" Grid.Column="0" FontSize="12" VerticalAlignment="Center" />
-                        <Label Content="Tips" Grid.Row="4" Grid.Column="0" FontSize="12" VerticalAlignment="Center" />
-                        <Label Content="Adjustments" Grid.Row="5" Grid.Column="0" FontSize="12" VerticalAlignment="Center" />
-                        <Label Content="Transaction Fees" Grid.Row="6" Grid.Column="0" FontSize="12" VerticalAlignment="Center"/>
-                        <Label Content="Total" FontWeight="Bold" Grid.Row="7" Grid.Column="0" FontSize="12" VerticalAlignment="Center" />
-                        <TextBlock Text="{Binding HoursWorked}" FontSize="12" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" />
-                        <TextBlock Text="{Binding OrdersDelivered}" FontSize="12" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center"/>
-                        <TextBlock Text="{Binding DropFees, StringFormat='£{0}'}" FontSize="12" Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" />
-                        <TextBlock Text="{Binding Tips, StringFormat='£{0}'}" FontSize="12" Grid.Row="4" Grid.Column="2" VerticalAlignment="Center" />
-                        <TextBlock Text="{Binding Adjustments, StringFormat='£{0}'}" FontSize="12" Grid.Row="5" Grid.Column="2" VerticalAlignment="Center" />
-                        <TextBlock Text="{Binding TransactionFees, StringFormat='£{0}'}" FontSize="12" Grid.Row="6" Grid.Column="2" VerticalAlignment="Center" />
-                        <TextBlock Text="{Binding Total, StringFormat='£{0}'}" FontSize="12" Grid.Row="7" Grid.Column="2" VerticalAlignment="Center" />
+                        <StackPanel Grid.Row="1" Grid.Column="0">
+                            <StackPanel.Resources>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Margin" Value="5,0,0,11"/>
+                                </Style>
+                            </StackPanel.Resources>
+                            <TextBlock Text="Hours Worked" Grid.Row="1" Grid.Column="0" FontSize="12" VerticalAlignment="Center"/>
+                            <TextBlock Text="Delivered" Grid.Row="2" Grid.Column="0" FontSize="12" VerticalAlignment="Center"/>
+                            <TextBlock Text="Drop Fees" Grid.Row="3" Grid.Column="0" FontSize="12" VerticalAlignment="Center" />
+                            <TextBlock Text="Tips" Grid.Row="4" Grid.Column="0" FontSize="12" VerticalAlignment="Center" />
+                            <TextBlock Text="Adjustments" Grid.Row="5" Grid.Column="0" FontSize="12" VerticalAlignment="Center" />
+                            <TextBlock Text="Transaction Fees" Grid.Row="6" Grid.Column="0" FontSize="12" VerticalAlignment="Center"/>
+                            <TextBlock Text="Total" FontWeight="Bold" Grid.Row="7" Grid.Column="0" FontSize="12" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1" Grid.Column="1">
+                            <StackPanel.Resources>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Margin" Value="5,0,0,11"/>
+                                </Style>
+                            </StackPanel.Resources>
+                            <TextBlock Text="{Binding HoursWorked, StringFormat='{}{0}h'}" FontSize="12" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding OrdersDelivered, StringFormat='{}{0} Orders'}" FontSize="12" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding DropFees, StringFormat='£{0}'}" FontSize="12" Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding Tips, StringFormat='£{0}'}" FontSize="12" Grid.Row="4" Grid.Column="2" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding Adjustments, StringFormat='£{0}'}" FontSize="12" Grid.Row="5" Grid.Column="2" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding TransactionFees, StringFormat='£{0}'}" FontSize="12" Grid.Row="6" Grid.Column="2" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding Total, StringFormat='£{0}'}" FontSize="12" Grid.Row="7" Grid.Column="2" VerticalAlignment="Center" />
+                        </StackPanel>
                     </Grid>
                     <Grid Grid.Column="1">
                         <Grid.ColumnDefinitions>
@@ -127,49 +138,74 @@
                 </Grid>
 
             </TabItem>
-            <TabItem x:Name="averagesTab" Header="Averages" Width="120">
+            <TabItem x:Name="statsAveragesTab" Header="Stats &amp; Averages" Width="120">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="3*"/>
-                        <ColumnDefinition Width="8*"/>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="11*"/>
                     </Grid.ColumnDefinitions>
                     <Grid>
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*"/>
                             <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="12"/>
-                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
                             <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="5*"/>
                         </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical" >
+                            <StackPanel.Resources>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Margin" Value="5,0,0,8"/>
+                                </Style>
+                            </StackPanel.Resources>
+                            <TextBlock Text="Hourly Earnings" FontSize="12" VerticalAlignment="Center"/>
+                            <TextBlock Text="Delivery Rate" FontSize="12" VerticalAlignment="Center"/>
+                            <TextBlock Text="Days Worked" FontSize="12" VerticalAlignment="Center"/>
+                            <TextBlock Text="Av. Hours Worked" FontSize="12" VerticalAlignment="Center"/>
+                            <TextBlock Text="Av. Shift Length" FontSize="12" VerticalAlignment="Center"/>
+                            <TextBlock Text="Av. Delivered (Invoice)" FontSize="12" VerticalAlignment="Center"/>
+                            <TextBlock Text="Av. Delivered (Shift)" FontSize="12" VerticalAlignment="Center"/>
+                            <TextBlock Text="Av. Drop Fees" VerticalAlignment="Center" />
+                            <TextBlock Text="Av. Order Fee" FontSize="12" VerticalAlignment="Center" />
+                            <TextBlock Text="Av. Tip Total" FontSize="12" VerticalAlignment="Center" />
+                            <TextBlock Text="Av. Tip per Order"  FontSize="12" VerticalAlignment="Center" />
+                            <TextBlock Text="Av. Orders for Tip" FontSize="12" VerticalAlignment="Center" />
+                            <TextBlock Text="Av. Total" FontSize="12" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1" Grid.Column="1">
+                            <StackPanel.Resources>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Margin" Value="5,0,0,8"/>
+                                </Style>
+                            </StackPanel.Resources>
+                            <TextBlock Text="{Binding HourlyEarnings, StringFormat='£{0} /hr'}" FontSize="12" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding OrdersPerHour, StringFormat='{}{0} Orders/hr'}" FontSize="12" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding DaysWorked, StringFormat='{}{0} Days'}" FontSize="12" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding AverageHoursWorked, StringFormat='{}{0}h'}" FontSize="12" Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding AverageShiftLength, StringFormat='{}{0}h'}" FontSize="12" Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding AverageOrdersDelivered, StringFormat='{}{0} Orders'}" FontSize="12" Grid.Row="4" Grid.Column="2" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding AverageShiftDeliveries, StringFormat='{}{0} Orders'}" FontSize="12" Grid.Row="4" Grid.Column="2" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding AverageDropFees, StringFormat='£{0}'}" FontSize="12" Grid.Row="5" Grid.Column="2" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding AverageOrderFee, StringFormat='£{0}'}" FontSize="12" Grid.Row="6" Grid.Column="2" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding AverageTips, StringFormat='£{0}'}" FontSize="12" Grid.Row="7" Grid.Column="2" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding AverageTipPerOrder, StringFormat='£{0}'}" FontSize="12" Grid.Row="8" Grid.Column="2" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding OrdersPerTip, StringFormat='{}{0} Orders'}" FontSize="12" Grid.Row="9" Grid.Column="2" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding AverageTotal, StringFormat='£{0}'}" FontSize="12" Grid.Row="10" Grid.Column="2" VerticalAlignment="Center" />
+                        </StackPanel>
                     </Grid>
-                </Grid>
-            </TabItem>
-            <TabItem x:Name="statisticsTab" Header="Statistics" Width="120">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="3*"/>
-                        <ColumnDefinition Width="8*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid>
+                    <Grid Grid.Column="1">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="12"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="3*"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
                             <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="5*"/>
                         </Grid.RowDefinitions>
+                        <ComboBox Grid.Row="0" Grid.Column="2" VerticalAlignment="Center"/>
+                        <Label Content="Graph:" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right"/>
                     </Grid>
                 </Grid>
             </TabItem>

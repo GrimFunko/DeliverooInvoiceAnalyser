@@ -190,7 +190,7 @@ namespace InvoiceAnalyserLibrary
             return Math.Round(DropFees(invoices) / count, 2, MidpointRounding.AwayFromZero);
         }
 
-        public double AverageOrdersDelivered(IInvoice[] invoices = null)
+        public double AverageOrdersPerInvoice(IInvoice[] invoices = null)
         {
             int count;
             if (invoices == null)
@@ -203,7 +203,7 @@ namespace InvoiceAnalyserLibrary
             return Math.Round((double)OrdersDelivered(invoices) / count, 2, MidpointRounding.AwayFromZero);
         }
 
-        public decimal TipsPerOrder(IInvoice[] invoices = null)
+        public decimal TipPerOrder(IInvoice[] invoices = null)
         {
             var orders = OrdersDelivered(invoices);
 
@@ -232,12 +232,49 @@ namespace InvoiceAnalyserLibrary
             return hours == 0 ? fees :Math.Round(fees / (decimal)hours, 2, MidpointRounding.AwayFromZero);
         }
 
-        public decimal FeesPerOrder(IInvoice[] invoices = null)
+        public decimal AverageOrderFee(IInvoice[] invoices = null)
         {
             var fees = DropFees(invoices);
             var orders = OrdersDelivered(invoices);
 
             return orders == 0 ? 0 : Math.Round(fees / orders, 2, MidpointRounding.AwayFromZero); 
+        }
+
+        public int DaysWorked(IInvoice[] invoices = null)
+        {
+            return invoices == null ? SumDaysWorked(Invoices) : SumDaysWorked(invoices);
+        }
+
+        private int SumDaysWorked(IInvoice[] invoices)
+        {
+            int output = 0;
+            foreach(var inv in invoices)
+            {
+                foreach(double hours in inv.HoursByDay.Values)
+                {
+                    if (hours > 0)
+                        output += 1;
+                }
+            }
+            return output;
+        }
+
+        public double AverageOrdersPerShift(IInvoice[] invoices = null)
+        {
+            var daysWorked = DaysWorked(invoices);
+            if (daysWorked == 0)
+                return 0;
+
+            return Math.Round((double)OrdersDelivered(invoices) / daysWorked, 2, MidpointRounding.AwayFromZero);
+        }
+
+        public double AverageShiftLength(IInvoice[] invoices = null)
+        {
+            var daysWorked = DaysWorked(invoices);
+            if (daysWorked == 0)
+                return 0;
+
+            return Math.Round(HoursWorked(invoices) / daysWorked, 2, MidpointRounding.AwayFromZero);
         }
     }
 }
