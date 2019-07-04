@@ -14,6 +14,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
+using Accord.Controls;
+
 namespace InvoiceAnalyserWPF
 {
     /// <summary>
@@ -255,6 +257,128 @@ namespace InvoiceAnalyserWPF
             }    
         }
 
+        private List<KeyValuePair<object, double>> _totalsGraphData;
+        public List<KeyValuePair<object, double>> TotalsGraphData
+        {
+            get { return _totalsGraphData; }
+            set
+            {
+                _totalsGraphData = value;
+                OnPropertyChanged("TotalsGraphData");
+            }
+        }
+
+        private List<KeyValuePair<object,double>> _hoursGraphData;
+        public List<KeyValuePair<object,double>> HoursGraphData
+        {
+            get { return _hoursGraphData; }
+            set
+            {
+                _hoursGraphData = value;
+                OnPropertyChanged("HoursGraphData");
+            }
+        }
+
+        private List<KeyValuePair<object, double>> _ordersGraphData;
+        public List<KeyValuePair<object, double>> OrdersGraphData
+        {
+            get { return _ordersGraphData; }
+            set
+            {
+                _ordersGraphData = value;
+                OnPropertyChanged("OrdersGraphData");
+            }
+        }
+
+        private List<KeyValuePair<object, double>> _dropFeesGraphData;
+        public List<KeyValuePair<object, double>> DropFeesGraphData
+        {
+            get { return _dropFeesGraphData; }
+            set
+            {
+                _dropFeesGraphData = value;
+                OnPropertyChanged("DropFeesGraphData");
+            }
+        }
+
+        private List<KeyValuePair<object, double>> _tipsGraphData;
+        public List<KeyValuePair<object, double>> TipsGraphData
+        {
+            get { return _tipsGraphData; }
+            set
+            {
+                _tipsGraphData = value;
+                OnPropertyChanged("TipsGraphData");
+            }
+        }
+
+        private List<KeyValuePair<object, double>> _hourlyEarningsGraphData;
+        public List<KeyValuePair<object, double>> HourlyEarningsGraphData
+        {
+            get { return _hourlyEarningsGraphData; }
+            set
+            {
+                _hourlyEarningsGraphData = value;
+                OnPropertyChanged("HourlyEarningsGraphData");
+            }
+        }
+
+        private List<KeyValuePair<object, double>> _deliveryRateGraphData;
+        public List<KeyValuePair<object, double>> DeliveryRateGraphData
+        {
+            get { return _deliveryRateGraphData; }
+            set
+            {
+                _deliveryRateGraphData = value;
+                OnPropertyChanged("DeliveryRateGraphData");
+            }
+        }
+
+        private List<KeyValuePair<object, double>> _daysWorkedGraphData;
+        public List<KeyValuePair<object, double>> DaysWorkedGraphData
+        {
+            get { return _daysWorkedGraphData; }
+            set
+            {
+                _daysWorkedGraphData = value;
+                OnPropertyChanged("DaysWorkedGraphData");
+            }
+        }
+
+        private List<KeyValuePair<object, double>> _averageShiftLengthGraphData;
+        public List<KeyValuePair<object, double>> AverageShiftLengthGraphData
+        {
+            get { return _averageShiftLengthGraphData; }
+            set
+            {
+                _averageShiftLengthGraphData = value;
+                OnPropertyChanged("AverageShiftLengthGraphData");
+            }
+        }
+
+        private List<KeyValuePair<object, double>> _averageTotalGraphData;
+        public List<KeyValuePair<object, double>> AverageTotalGraphData
+        {
+            get { return _averageTotalGraphData; }
+            set
+            {
+                _averageTotalGraphData = value;
+                OnPropertyChanged("AverageTotalGraphData");
+            }
+        }
+
+        private List<KeyValuePair<object, double>> _averageShiftDeliveriesGraphData;
+        public List<KeyValuePair<object, double>> AverageShiftDeliveriesGraphData
+        {
+            get { return _averageShiftDeliveriesGraphData; }
+            set
+            {
+                _averageShiftDeliveriesGraphData = value;
+                OnPropertyChanged("AverageShiftDeliveriesGraphData");
+            }
+        }
+
+
         #endregion
 
         public AnalysisWindow(InvoiceAnalysis invoiceAnalysis)
@@ -266,24 +390,76 @@ namespace InvoiceAnalyserWPF
             allInvoicesGroupBox.Header = $"All Invoices ({Analyser.Invoices.Count()})";
             analyseButton.Click += AnalyseButton_Click;
             SelectedInvoices.ListChanged += AnalysisWindow_SelectedInvoicesChanged;
+            TabController.SelectionChanged += TabController_SelectionChanged;
             PopulateAllInvoicesContainer();
 
             MinHeight = Height;
             MaxHeight = Height;
             MinWidth = Width;
             MaxWidth = Width;
+
+            TotalsGraphs = new UIElement[] { totalsGraph, ordersDeliveredGraph, dropFeesGraph, tipsGraph, hoursGraph };
+            totalsGraphs.ItemsSource = new string[] { (string)totalsGraph.Title, (string)ordersDeliveredGraph.Title, (string)dropFeesGraph.Title, (string)tipsGraph.Title, (string)hoursGraph.Title };
+            totalsGraphs.SelectionChanged += TotalsGraphs_SelectionChanged;
+            totalsGraphs.SelectedItem = ((LineGraph)TotalsGraphs[0]).Title;
+
+            SAGraphs = new UIElement[] { hourlyEarningsGraph, deliveryRateGraph, daysWorkedGraph, averageShiftLengthGraph, averageShiftDeliveriesGraph, averageTotalGraph };
+            saGraphs.ItemsSource = new string[] { hourlyEarningsGraph.Title, deliveryRateGraph.Title, daysWorkedGraph.Title, averageShiftLengthGraph.Title, averageShiftDeliveriesGraph.Title, averageTotalGraph.Title };
+            saGraphs.SelectionChanged += SaGraphs_SelectionChanged;
+            saGraphs.SelectedItem = ((LineGraph)SAGraphs[0]).Title;
+
         }
 
-        private void RefreshProperties()
+        private void TabController_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (TabController.SelectedIndex == 0)
+                RefreshTotalsGraphData();
+
+            else RefreshSAGraphData();
+        }
+
+        private void SaGraphs_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string item = (string)saGraphs.SelectedItem;
+            foreach (LineGraph graph in SAGraphs)
+            {
+                if (graph.Title == item)
+                {
+                    graph.IsEnabled = true;
+                    graph.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    graph.IsEnabled = false;
+                    graph.Visibility = Visibility.Hidden;
+                }
+            }
+        }
+
+        public UIElement[] TotalsGraphs { get; set; }
+        public UIElement[] SAGraphs { get; set; }
+
+        private void TotalsGraphs_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string item = (string)totalsGraphs.SelectedItem;
+            foreach(LineGraph graph in TotalsGraphs)
+            {
+                if(graph.Title == item)
+                {
+                    graph.IsEnabled = true;
+                    graph.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    graph.IsEnabled = false;
+                    graph.Visibility = Visibility.Hidden;
+                }
+            }
+        }
+
+        private void RefreshSAProperties()
         {
             var ia = SelectedInvoices.ToArray();
-            HoursWorked = Analyser.HoursWorked(ia);
-            OrdersDelivered = Analyser.OrdersDelivered(ia);
-            DropFees = Analyser.DropFees(ia);
-            Tips = Analyser.Tips(ia);
-            Adjustments = Analyser.Adjustments(ia);
-            TransactionFees = Analyser.TransactionFees(ia);
-            Total = Analyser.Total(ia);
             AverageHoursWorked = Analyser.AverageHoursWorked(ia);
             AverageOrdersDelivered = Analyser.AverageOrdersPerInvoice(ia);
             AverageDropFees = Analyser.AverageDropFees(ia);
@@ -297,13 +473,232 @@ namespace InvoiceAnalyserWPF
             DaysWorked = Analyser.DaysWorked(ia);
             AverageShiftDeliveries = Analyser.AverageOrdersPerShift(ia);
             AverageShiftLength = Analyser.AverageShiftLength(ia);
+
         }
+
+        private void RefreshSAGraphData()
+        {
+            if (SelectedInvoices.Count != 0)
+            {
+                HourlyEarningsGraphData = GetHourlyEarningsData();
+                DeliveryRateGraphData = GetDeliveryRateData();
+                DaysWorkedGraphData = GetDaysWorkedData();
+                AverageShiftLengthGraphData = GetAverageShiftLengthData();
+                AverageShiftDeliveriesGraphData = GetAverageShiftDeliveriesData();
+                AverageTotalGraphData = GetAverageTotalData();
+            }
+            else
+            {
+                HourlyEarningsGraphData = null;
+                DeliveryRateGraphData = null;
+                DaysWorkedGraphData = null;
+                AverageShiftLengthGraphData = null;
+                AverageShiftDeliveriesGraphData = null;
+                AverageTotalGraphData = null;
+            }
+        }
+
+        private void RefreshTotalsGraphData()
+        {
+            if (SelectedInvoices.Count != 0)
+            {
+                TotalsGraphData = GetTotalsData();
+                OrdersGraphData = GetOrdersData();
+                HoursGraphData = GetHoursData();
+                DropFeesGraphData = GetDropFeesData();
+                TipsGraphData = GetTipsData();
+            }
+            else
+            {
+                TotalsGraphData = null;
+                OrdersGraphData = null;
+                HoursGraphData = null;
+                DropFeesGraphData = null;
+                TipsGraphData = null;
+            }
+        }
+
+        private void RefreshTotalsProperties()
+        {
+            var ia = SelectedInvoices.ToArray();
+            HoursWorked = Analyser.HoursWorked(ia);
+            OrdersDelivered = Analyser.OrdersDelivered(ia);
+            DropFees = Analyser.DropFees(ia);
+            Tips = Analyser.Tips(ia);
+            Adjustments = Analyser.Adjustments(ia);
+            TransactionFees = Analyser.TransactionFees(ia);
+            Total = Analyser.Total(ia);
+
+        }
+
+        #region GetGraphDataSets
+        private List<KeyValuePair<object, double>> GetTotalsData()
+        {
+            var output = new List<KeyValuePair<object, double>>();
+            DateTime sd = new DateTime(2000, 01, 01);
+            for (int i = 0; i < 12; i++)
+            {
+                var sum = SelectedInvoices.Where(x => x.Date.Month == sd.Month).Sum(y => y.Total);
+                output.Add(new KeyValuePair<object, double>(sd.ToString("MMM"), (double)sum));
+                sd = sd.AddMonths(1);
+            }
+
+            return output;
+        }
+
+        private List<KeyValuePair<object, double>> GetHoursData()
+        {
+            var output = new List<KeyValuePair<object, double>>();
+            DateTime sd = new DateTime(2000, 01, 01);
+            for (int i = 0; i < 12; i++)
+            {
+                var sum = SelectedInvoices.Where(x => x.Date.Month == sd.Month).Sum(y => y.HoursWorked);
+                output.Add(new KeyValuePair<object, double>(sd.ToString("MMM"), (double)sum));
+                sd = sd.AddMonths(1);
+            }
+
+            return output;
+        }
+
+        private List<KeyValuePair<object, double>> GetOrdersData()
+        {
+            var output = new List<KeyValuePair<object, double>>();
+            DateTime sd = new DateTime(2000, 01, 01);
+            for (int i = 0; i < 12; i++)
+            {
+                var sum = SelectedInvoices.Where(x => x.Date.Month == sd.Month).Sum(y => y.OrdersDelivered);
+                output.Add(new KeyValuePair<object, double>(sd.ToString("MMM"), (double)sum));
+                sd = sd.AddMonths(1);
+            }
+
+            return output;
+        }
+
+        private List<KeyValuePair<object, double>> GetDropFeesData()
+        {
+            var output = new List<KeyValuePair<object, double>>();
+            DateTime sd = new DateTime(2000, 01, 01);
+            for (int i = 0; i < 12; i++)
+            {
+                var sum = SelectedInvoices.Where(x => x.Date.Month == sd.Month).Sum(y => y.DropFees);
+                output.Add(new KeyValuePair<object, double>(sd.ToString("MMM"), (double)sum));
+                sd = sd.AddMonths(1);
+            }
+
+            return output;
+        }
+
+        private List<KeyValuePair<object, double>> GetTipsData()
+        {
+            var output = new List<KeyValuePair<object, double>>();
+            DateTime sd = new DateTime(2000, 01, 01);
+            for (int i = 0; i < 12; i++)
+            {
+                var sum = SelectedInvoices.Where(x => x.Date.Month == sd.Month).Sum(y => y.Tips);
+                output.Add(new KeyValuePair<object, double>(sd.ToString("MMM"), (double)sum));
+                sd = sd.AddMonths(1);
+            }
+
+            return output;
+        }
+
+        private List<KeyValuePair<object, double>> GetHourlyEarningsData()
+        {
+            var output = new List<KeyValuePair<object, double>>();
+            DateTime sd = new DateTime(2000, 01, 01);
+            for (int i = 0; i < 12; i++)
+            {
+                var sum = Analyser.HourlyEarnings(SelectedInvoices.Where(x => x.Date.Month == sd.Month).ToArray());
+                output.Add(new KeyValuePair<object, double>(sd.ToString("MMM"), (double)sum));
+                sd = sd.AddMonths(1);
+            }
+
+            return output;
+        }
+
+        private List<KeyValuePair<object, double>> GetDeliveryRateData()
+        {
+            var output = new List<KeyValuePair<object, double>>();
+            DateTime sd = new DateTime(2000, 01, 01);
+            for (int i = 0; i < 12; i++)
+            {
+                var sum = Analyser.OrdersPerHour(SelectedInvoices.Where(x => x.Date.Month == sd.Month).ToArray());
+                output.Add(new KeyValuePair<object, double>(sd.ToString("MMM"), (double)sum));
+                sd = sd.AddMonths(1);
+            }
+
+            return output;
+        }
+
+        private List<KeyValuePair<object, double>> GetDaysWorkedData()
+        {
+            var output = new List<KeyValuePair<object, double>>();
+            DateTime sd = new DateTime(2000, 01, 01);
+            for (int i = 0; i < 12; i++)
+            {
+                var sum = Analyser.DaysWorked(SelectedInvoices.Where(x => x.Date.Month == sd.Month).ToArray());
+                output.Add(new KeyValuePair<object, double>(sd.ToString("MMM"), (double)sum));
+                sd = sd.AddMonths(1);
+            }
+
+            return output;
+        }
+
+        private List<KeyValuePair<object, double>> GetAverageShiftLengthData()
+        {
+            var output = new List<KeyValuePair<object, double>>();
+            DateTime sd = new DateTime(2000, 01, 01);
+            for (int i = 0; i < 12; i++)
+            {
+                var sum = Analyser.AverageShiftLength(SelectedInvoices.Where(x => x.Date.Month == sd.Month).ToArray());
+                output.Add(new KeyValuePair<object, double>(sd.ToString("MMM"), (double)sum));
+                sd = sd.AddMonths(1);
+            }
+
+            return output;
+        }
+
+        private List<KeyValuePair<object, double>> GetAverageShiftDeliveriesData()
+        {
+            var output = new List<KeyValuePair<object, double>>();
+            DateTime sd = new DateTime(2000, 01, 01);
+            for (int i = 0; i < 12; i++)
+            {
+                var sum = Analyser.AverageOrdersPerShift(SelectedInvoices.Where(x => x.Date.Month == sd.Month).ToArray());
+                output.Add(new KeyValuePair<object, double>(sd.ToString("MMM"), (double)sum));
+                sd = sd.AddMonths(1);
+            }
+
+            return output;
+        }
+
+        private List<KeyValuePair<object, double>> GetAverageTotalData()
+        {
+            var output = new List<KeyValuePair<object, double>>();
+            DateTime sd = new DateTime(2000, 01, 01);
+            for (int i = 0; i < 12; i++)
+            {
+                var sum = Analyser.AverageTotal(SelectedInvoices.Where(x => x.Date.Month == sd.Month).ToArray());
+                output.Add(new KeyValuePair<object, double>(sd.ToString("MMM"), (double)sum));
+                sd = sd.AddMonths(1);
+            }
+
+            return output;
+        }
+
+        #endregion
 
         private void AnalysisWindow_SelectedInvoicesChanged(object sender, EventArgs e)
         {
             selectedInvoicesGroupBox.Header = $"Selected Invoices ({SelectedInvoices.Count})";
-            RefreshProperties();
-            return;
+            RefreshTotalsProperties();
+            RefreshSAProperties();
+
+            if (TabController.SelectedIndex == 0)
+                RefreshTotalsGraphData();
+            
+            else RefreshSAGraphData();
+
         }
 
         private void AnalyseButton_Click(object sender, RoutedEventArgs e)
@@ -400,7 +795,6 @@ namespace InvoiceAnalyserWPF
 
         private void SelectedInvoicesContainer_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            //System.Diagnostics.Debug.WriteLine("Double Click Event.");
             var invoice = (ListViewItem)sender;
             var name = SelectedInvoices.FirstOrDefault(x => x.Date == (((IInvoice)invoice.Content).Date)).FilePath;
             System.Diagnostics.Process.Start(name);

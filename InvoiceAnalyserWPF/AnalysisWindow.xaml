@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InvoiceAnalyserWPF"
+        xmlns:Accord="clr-namespace:Accord.Controls;assembly=Accord.Controls"
         mc:Ignorable="d"
         Title="Invoice Analysis" Height="560" Width="1060">
     <Window.Resources>
@@ -77,7 +78,7 @@
                 </ScrollViewer>
             </GroupBox>
         </Grid>
-        <TabControl Grid.Row="2" Grid.Column="2" Margin="0, -12, 0, 0" BorderBrush="Transparent">
+        <TabControl x:Name="TabController" Grid.Row="2" Grid.Column="2" Margin="0, -12, 0, 0" BorderBrush="Transparent">
             <TabItem x:Name="totalsTab" Header="Totals" Width="120">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -122,7 +123,7 @@
                             <TextBlock Text="{Binding Total, StringFormat='£{0}'}" FontSize="12" Grid.Row="7" Grid.Column="2" VerticalAlignment="Center" />
                         </StackPanel>
                     </Grid>
-                    <Grid Grid.Column="1">
+                    <Grid x:Name="totalsGraphArea" Grid.Column="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="4*"/>
                             <ColumnDefinition Width="1*"/>
@@ -132,8 +133,14 @@
                             <RowDefinition Height="30"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <ComboBox Grid.Row="0" Grid.Column="2" VerticalAlignment="Center"/>
+                        <ComboBox x:Name="totalsGraphs" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" />
                         <Label Content="Graph:" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right"/>
+
+                        <local:LineGraph x:Name="totalsGraph" Title="Totals" GraphMargin="30" GraphData="{Binding TotalsGraphData}" xAxisTitle="Months" yAxisTitle="Month Total £" DataLineColour="Red" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1"/>
+                        <local:LineGraph x:Name="ordersDeliveredGraph" Title="Orders Delivered" GraphMargin="30" GraphData="{Binding OrdersGraphData}" xAxisTitle="Months" yAxisTitle="Month Total Orders" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1"/>
+                        <local:LineGraph x:Name="dropFeesGraph" Title="Drop Fees" GraphMargin="30" GraphData="{Binding DropFeesGraphData}" xAxisTitle="Months" yAxisTitle="Month Total Drop Fees £" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1"/>
+                        <local:LineGraph x:Name="tipsGraph" Title="Tips" GraphMargin="30" GraphData="{Binding TipsGraphData}" xAxisTitle="Months" yAxisTitle="Month Total Tips £" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1"/>
+                        <local:LineGraph x:Name="hoursGraph" Title="Hours Worked" GraphMargin="30" GraphData="{Binding HoursGraphData}" xAxisTitle="Months" yAxisTitle="Month Total Hours Worked" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1"/>
                     </Grid>
                 </Grid>
 
@@ -204,8 +211,16 @@
                             <RowDefinition Height="30"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <ComboBox Grid.Row="0" Grid.Column="2" VerticalAlignment="Center"/>
+                        <ComboBox x:Name="saGraphs" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center"/>
                         <Label Content="Graph:" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right"/>
+
+                        <local:LineGraph x:Name="hourlyEarningsGraph" Title="Hourly Earnings" GraphMargin="30" GraphData="{Binding HourlyEarningsGraphData}" xAxisTitle="Months" yAxisTitle="Hourly Earnings £" DataLineColour="Red" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1"/>
+                        <local:LineGraph x:Name="deliveryRateGraph" Title="Delivery Rate" GraphMargin="30" GraphData="{Binding DeliveryRateGraphData}" xAxisTitle="Months" yAxisTitle="Orders Per Hour" DataLineColour="Red" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1"/>
+                        <local:LineGraph x:Name="daysWorkedGraph" Title="Days Worked" GraphMargin="30" GraphData="{Binding DaysWorkedGraphData}" xAxisTitle="Months" yAxisTitle="Days per Month" DataLineColour="Red" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1"/>
+                        <local:LineGraph x:Name="averageShiftLengthGraph" Title="Average Shift Length" GraphMargin="30" GraphData="{Binding AverageShiftLengthGraphData}" xAxisTitle="Months" yAxisTitle="Hours per Shift" DataLineColour="Red" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1"/>
+                        <local:LineGraph x:Name="averageShiftDeliveriesGraph" Title="Average Shift Deliveries" GraphMargin="30" GraphData="{Binding AverageShiftDeliveriesGraphData}" xAxisTitle="Months" yAxisTitle="Orders per Shift" DataLineColour="Red" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1"/>
+                        <local:LineGraph x:Name="averageTotalGraph" Title="Average Totals" GraphMargin="30" GraphData="{Binding AverageTotalGraphData}" xAxisTitle="Months" yAxisTitle="Average Total £" DataLineColour="Red" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1"/>
+
                     </Grid>
                 </Grid>
             </TabItem>
