@@ -14,8 +14,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-using Accord.Controls;
-
 namespace InvoiceAnalyserWPF
 {
     /// <summary>
