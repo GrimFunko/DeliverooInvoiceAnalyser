@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InvoiceAnalyserLibrary.Test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvoiceAnalyserWPF", "InvoiceAnalyserWPF\InvoiceAnalyserWPF.csproj", "{209052F9-BDC1-4F23-8E9E-09DBCF8E9982}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "InvoiceAnalyserSetup", "InvoiceAnalyserSetup\InvoiceAnalyserSetup.vdproj", "{E3F9788E-CBB1-4446-95F5-23DA55356B43}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,17 +24,15 @@ Global
 		{42399CBA-50F0-4181-A2CE-CACF113D2B97}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42399CBA-50F0-4181-A2CE-CACF113D2B97}.Release|Any CPU.Build.0 = Release|Any CPU
 		{059C7510-8271-4A9F-AB81-4C50E2A37EFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{059C7510-8271-4A9F-AB81-4C50E2A37EFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{059C7510-8271-4A9F-AB81-4C50E2A37EFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{059C7510-8271-4A9F-AB81-4C50E2A37EFF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DAD91CAF-407D-482C-A4DD-24B22057E0AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DAD91CAF-407D-482C-A4DD-24B22057E0AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DAD91CAF-407D-482C-A4DD-24B22057E0AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DAD91CAF-407D-482C-A4DD-24B22057E0AD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{209052F9-BDC1-4F23-8E9E-09DBCF8E9982}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{209052F9-BDC1-4F23-8E9E-09DBCF8E9982}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{209052F9-BDC1-4F23-8E9E-09DBCF8E9982}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{209052F9-BDC1-4F23-8E9E-09DBCF8E9982}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3F9788E-CBB1-4446-95F5-23DA55356B43}.Debug|Any CPU.ActiveCfg = Debug
+		{E3F9788E-CBB1-4446-95F5-23DA55356B43}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
